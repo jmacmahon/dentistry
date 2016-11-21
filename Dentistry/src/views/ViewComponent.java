@@ -2,6 +2,6 @@ package views;
 
 import javax.swing.JPanel;
 
-public interface View {
+public interface ViewComponent {
 	public JPanel getPanel();
 }
