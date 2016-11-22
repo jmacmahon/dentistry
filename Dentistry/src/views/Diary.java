@@ -11,6 +11,7 @@ import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -126,8 +127,16 @@ public class Diary implements ViewComponent {
 			delete.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					// Notify the controller
-					System.out.println("Deleting appointment with id: " + appointment.getID());
+					int confirm = JOptionPane.showConfirmDialog(
+							panel,
+							"Are you sure you want to delete this appointment?",
+							"Confirm deletion",
+							JOptionPane.YES_NO_OPTION
+					);
+					if (confirm == 0) {
+						// Notify the controller
+						System.out.println("Deleting appointment with id: " + appointment.getID());
+					}
 				}
 			});
 			panel.add(delete);
