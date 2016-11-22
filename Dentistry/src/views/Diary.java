@@ -1,20 +1,5 @@
 package views;
 
-import javax.swing.JPanel;
-import javax.swing.JSeparator;
-import javax.swing.SwingConstants;
-
-import main.AppointmentInterface;
-import main.Config;
-
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -22,6 +7,17 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
 import java.util.HashMap;
 import java.util.Vector;
+
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JSeparator;
+import javax.swing.SwingConstants;
+
+import main.AppointmentInterface;
+import main.Config;
 
 public class Diary implements ViewComponent {
 	private HashMap<DayOfWeek, Day> days;
@@ -37,7 +33,7 @@ public class Diary implements ViewComponent {
 			Day day = new Day(
 					new Vector<AppointmentInterface>(),
 					weekStartDate.with(TemporalAdjusters.nextOrSame(dayOfWeek))
-			);
+					);
 			this.days.put(dayOfWeek, day);
 		}
 
@@ -55,6 +51,7 @@ public class Diary implements ViewComponent {
 		}
 	}
 
+	@Override
 	public JPanel getPanel() {
 		JPanel panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel, BoxLayout.LINE_AXIS));
@@ -77,6 +74,7 @@ public class Diary implements ViewComponent {
 			this.appointments.add(appointment);
 		}
 
+		@Override
 		public JPanel getPanel() {
 			JPanel panel = new JPanel();
 			panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -90,7 +88,7 @@ public class Diary implements ViewComponent {
 			return panel;
 		}
 	}
-	
+
 	private class AppointmentComponent implements ViewComponent {
 		private AppointmentInterface appointment;
 
@@ -98,6 +96,7 @@ public class Diary implements ViewComponent {
 			this.appointment = appointment;
 		}
 
+		@Override
 		public JPanel getPanel() {
 			JPanel panel = new JPanel();
 			panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
@@ -105,7 +104,7 @@ public class Diary implements ViewComponent {
 					this.appointment.getStartTime().format(DateTimeFormatter.ofPattern("HH:mm"))
 					+ " — "
 					+ this.appointment.getEndTime().format(DateTimeFormatter.ofPattern("HH:mm"))
-			));
+					));
 			panel.add(new JLabel("Patient: " + this.appointment.getPatientName()));
 			panel.add(new JLabel("Partner: " + appointment.getPartnerName()));
 			panel.add((new AppointmentButtons(this.appointment)).getPanel());
@@ -121,25 +120,14 @@ public class Diary implements ViewComponent {
 			this.appointment = appointment;
 		}
 
+		@Override
 		public JPanel getPanel() {
 			JPanel panel = new JPanel();
-			JButton delete = new JButton("Delete");
-			delete.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					int confirm = JOptionPane.showConfirmDialog(
-							panel,
-							"Are you sure you want to delete this appointment?",
-							"Confirm deletion",
-							JOptionPane.YES_NO_OPTION
-					);
-					if (confirm == 0) {
-						// Notify the controller
-						System.out.println("Deleting appointment with id: " + appointment.getID());
-					}
-				}
+			JButton details = new JButton("Details");
+			details.addActionListener(e -> {
+				ViewComponent.spawnInFrame(new AppointmentDetail(appointment), "Appointment");
 			});
-			panel.add(delete);
+			panel.add(details);
 			return panel;
 		}
 	}

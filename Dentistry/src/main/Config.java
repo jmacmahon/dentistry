@@ -11,7 +11,7 @@ public final class Config {
 			DayOfWeek.WEDNESDAY,
 			DayOfWeek.THURSDAY,
 			DayOfWeek.FRIDAY,
-//			DayOfWeek.SATURDAY,
-//			DayOfWeek.SUNDAY,
-		};
+			//DayOfWeek.SATURDAY,
+			//DayOfWeek.SUNDAY,
+	};
 }
