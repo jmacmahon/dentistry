@@ -9,7 +9,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import main.AppointmentInterface;
+import model.AppointmentInterface;
 
 public class AppointmentDetail implements ViewComponent {
 	AppointmentInterface appointment;

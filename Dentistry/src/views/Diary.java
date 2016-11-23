@@ -16,8 +16,8 @@ import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
 
-import main.AppointmentInterface;
 import main.Config;
+import model.AppointmentInterface;
 
 public class Diary implements ViewComponent {
 	private HashMap<DayOfWeek, Day> days;

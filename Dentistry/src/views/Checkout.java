@@ -10,8 +10,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 
-import main.PatientInterface;
-import main.TreatmentInterface;
+import model.PatientInterface;
+import model.TreatmentInterface;
 
 public class Checkout implements ViewComponent {
 	private List<TreatmentInterface> treatments;

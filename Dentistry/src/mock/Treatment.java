@@ -1,6 +1,6 @@
 package mock;
 
-import main.TreatmentInterface;
+import model.TreatmentInterface;
 
 public class Treatment implements TreatmentInterface {
 	public static final Treatment[] MOCK_DATA = {

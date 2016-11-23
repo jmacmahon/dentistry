@@ -4,9 +4,9 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Vector;
 
-import main.AppointmentInterface;
-import main.PatientInterface;
-import main.TreatmentInterface;
+import model.AppointmentInterface;
+import model.PatientInterface;
+import model.TreatmentInterface;
 
 public class Appointment implements AppointmentInterface {
 	private static final int[] t1 = {1, 2};

@@ -11,6 +11,7 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import mock.Appointment;
+import model.AppointmentInterface;
 import views.Diary;
 import views.ViewComponent;
 

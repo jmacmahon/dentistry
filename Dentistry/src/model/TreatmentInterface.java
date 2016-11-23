@@ -1,4 +1,4 @@
-package main;
+package model;
 
 public interface TreatmentInterface {
 	public String getName();
