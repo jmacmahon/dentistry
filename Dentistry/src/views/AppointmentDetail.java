@@ -37,6 +37,8 @@ public class AppointmentDetail implements ViewComponent {
 
 	private JPanel getButtons() {
 		JButton delete = new JButton("Delete");
+
+		// TODO disabled if appt not marked as completed
 		JButton checkOut = new JButton("Check out");
 
 		delete.addActionListener(e -> {
@@ -52,7 +54,7 @@ public class AppointmentDetail implements ViewComponent {
 		});
 
 		checkOut.addActionListener(e -> {
-			// Go to payment view
+			ViewComponent.spawnInFrame(new Checkout(appointment.getTreatments(), appointment.getPatient()), "Checkout");
 		});
 
 		JPanel buttons = new JPanel();

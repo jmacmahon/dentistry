@@ -1,6 +1,7 @@
 package main;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public interface AppointmentInterface {
 	public LocalDateTime getStartTime();
@@ -14,4 +15,8 @@ public interface AppointmentInterface {
 	public String getPartnerName();
 
 	public String getID();
+
+	public List<TreatmentInterface> getTreatments();
+
+	public PatientInterface getPatient();
 }
