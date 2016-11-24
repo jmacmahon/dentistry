@@ -12,6 +12,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import mock.Appointment;
 import model.AppointmentInterface;
+import model.db.Database;
 import views.Diary;
 import views.ViewComponent;
 
@@ -26,6 +27,9 @@ public class Main {
 	}
 
 	public static void main(String[] args) {
+		Database db = new Database(Config.DB_URL, Config.DB_USER, Config.DB_PASS);
+		db.init();
+		
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException

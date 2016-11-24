@@ -1,0 +1,14 @@
+Instructions:
+
+Install MySQL: http://dev.mysql.com/downloads/installer/
+
+Add connector to build bath
+- In Eclipse, right click the project folder
+- Build path -> Configure -> Add External JARs
+- Find the JDBC JAR file
+- C -> Program Files (x86) -> MySQL -> Connector.J 5.1 -> mysql-connector-java-5.1.40-bin.jar
+- click open, done
+
+Keep port as: 3306
+
+Set Mysql root pass as: dentistry
