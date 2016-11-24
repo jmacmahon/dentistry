@@ -14,23 +14,23 @@ public class Appointment implements AppointmentInterface {
 	private static final int[] t3 = {0, 2, 3};
 
 	public static final Appointment[] MOCK_DATA = {
-			new Appointment(LocalDateTime.of(2016, 11, 21, 13, 0), 20, "Joe Bloggs", "Dentist", t1),
-			new Appointment(LocalDateTime.of(2016, 11, 21, 13, 20), 20, "Laura Phipps", "Dentist", t1),
-			new Appointment(LocalDateTime.of(2016, 11, 22, 9, 30), 20, "Eliza Juniper", "Hygienist", t2),
-			new Appointment(LocalDateTime.of(2016, 11, 22, 15, 0), 45, "Mary O'Kane", "Dentist", t3),
-			new Appointment(LocalDateTime.of(2016, 11, 23, 10, 20), 30, "Brad Chapman", "Hygienist", t1),
+			new Appointment(LocalDateTime.of(2016, 11, 21, 13, 0), 20, Patient.MOCK_DATA[0], "Dentist", t1),
+			new Appointment(LocalDateTime.of(2016, 11, 21, 13, 20), 20, Patient.MOCK_DATA[1], "Dentist", t1),
+			new Appointment(LocalDateTime.of(2016, 11, 22, 9, 30), 20, Patient.MOCK_DATA[2], "Hygienist", t2),
+			new Appointment(LocalDateTime.of(2016, 11, 22, 15, 0), 45, Patient.MOCK_DATA[3], "Dentist", t3),
+			new Appointment(LocalDateTime.of(2016, 11, 23, 10, 20), 30, Patient.MOCK_DATA[4], "Hygienist", t1),
 	};
 
 	private LocalDateTime startTime;
 	private int duration;
-	private String patientName;
+	private PatientInterface patient;
 	private String partnerName;
 	private Vector<TreatmentInterface> treatments;
 
-	public Appointment(LocalDateTime startTime, int duration, String patientName, String partnerName, int[] treatments) {
+	public Appointment(LocalDateTime startTime, int duration, PatientInterface patient, String partnerName, int[] treatments) {
 		this.startTime = startTime;
 		this.duration = duration;
-		this.patientName = patientName;
+		this.patient = patient;
 		this.partnerName = partnerName;
 		this.treatments = new Vector<>();
 		for (int treatment : treatments) {
@@ -65,17 +65,16 @@ public class Appointment implements AppointmentInterface {
 
 	@Override
 	public String getPatientName() {
-		return this.patientName;
+		return this.patient.getSurname() + ", " + this.patient.getForename();
 	}
 
 	@Override
 	public String getID() {
-		return this.startTime.format(DateTimeFormatter.ofPattern("YYYY-MM-dd HH:mm")) + " " + this.patientName + " with " + this.partnerName;
+		return this.startTime.format(DateTimeFormatter.ofPattern("YYYY-MM-dd HH:mm")) + " " + this.getPatientName() + " with " + this.partnerName;
 	}
 
 	@Override
 	public PatientInterface getPatient() {
-		return new PatientInterface() {
-		};
+		return this.patient;
 	}
 }

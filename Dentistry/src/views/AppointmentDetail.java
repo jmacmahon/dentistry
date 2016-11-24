@@ -8,6 +8,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JSeparator;
 
 import model.AppointmentInterface;
 
@@ -18,20 +19,56 @@ public class AppointmentDetail implements ViewComponent {
 		this.appointment = appointment;
 	}
 
+	private JPanel getPatientDetails() {
+		JPanel patientDetails = new JPanel();
+		patientDetails.setLayout(new GridLayout(0, 2));
+		patientDetails.add(new JLabel("Patient"));
+		patientDetails.add((new PatientDetail(this.appointment.getPatient())).getPanel());
+
+		return patientDetails;
+	}
+
+	private JPanel getPartnerDetails() {
+		JPanel partnerDetails = new JPanel();
+		partnerDetails.setLayout(new GridLayout(0, 2));
+		partnerDetails.add(new JLabel("Partner"));
+		partnerDetails.add(new JLabel(this.appointment.getPartnerName()));
+
+		return partnerDetails;
+	}
+
+	private JPanel getDateTimeDetails() {
+		JPanel dateTimeDetails = new JPanel();
+		dateTimeDetails.setLayout(new GridLayout(0, 2));
+		dateTimeDetails.add(new JLabel("Date & Time"));
+		dateTimeDetails.add(new JLabel(this.appointment.getStartTime().format(DateTimeFormatter.ofPattern("YYYY-MM-dd HH:mm (EEE)"))));
+
+		return dateTimeDetails;
+	}
+
+	private JPanel getDurationDetails() {
+		JPanel partnerDetails = new JPanel();
+		partnerDetails.setLayout(new GridLayout(0, 2));
+		partnerDetails.add(new JLabel("Duration"));
+		partnerDetails.add(new JLabel(Integer.toString(this.appointment.getDurationMinutes()) + "m"));
+
+		return partnerDetails;
+	}
+
 	private JPanel getDetails() {
 		JPanel innerDetails = new JPanel();
-		innerDetails.setLayout(new GridLayout(0, 2));
-		innerDetails.add(new JLabel("Patient"));
-		innerDetails.add(new JLabel(appointment.getPatientName()));
+		innerDetails.setLayout(new BoxLayout(innerDetails, BoxLayout.PAGE_AXIS));
+		innerDetails.add(this.getPatientDetails());
+		innerDetails.add(new JSeparator(JSeparator.HORIZONTAL));
 
-		innerDetails.add(new JLabel("Partner"));
-		innerDetails.add(new JLabel(appointment.getPartnerName()));
+		innerDetails.add(this.getPartnerDetails());
+		innerDetails.add(new JSeparator(JSeparator.HORIZONTAL));
 
-		innerDetails.add(new JLabel("Date & Time"));
-		innerDetails.add(new JLabel(appointment.getStartTime().format(DateTimeFormatter.ofPattern("YYYY-MM-dd HH:mm (EEE)"))));
+		innerDetails.add(this.getDateTimeDetails());
+		innerDetails.add(new JSeparator(JSeparator.HORIZONTAL));
 
-		innerDetails.add(new JLabel("Duration"));
-		innerDetails.add(new JLabel(Integer.toString(appointment.getDurationMinutes()) + "m"));
+		innerDetails.add(this.getDurationDetails());
+		innerDetails.add(new JSeparator(JSeparator.HORIZONTAL));
 		return innerDetails;
 	}
 
