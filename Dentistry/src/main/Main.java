@@ -21,7 +21,7 @@ import views.ViewComponent;
 
 public class Main {
 	private static void createAndShowDiary() {
-		LocalDate thisMonday = LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+		LocalDate thisMonday = LocalDate.of(2016, 11, 25).with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
 		Diary d = new Diary(new Vector<AppointmentInterface>(Arrays.asList(Appointment.MOCK_DATA)), thisMonday);
 
 		JFrame frame = ViewComponent.spawnInFrame(d, "Dentistry");

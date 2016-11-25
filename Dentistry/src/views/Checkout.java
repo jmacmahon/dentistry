@@ -13,7 +13,7 @@ import javax.swing.JSeparator;
 import model.PatientInterface;
 import model.TreatmentInterface;
 
-public class Checkout implements ViewComponent {
+public class Checkout extends ViewComponent {
 	private List<TreatmentInterface> treatments;
 	private PatientInterface patient;
 
@@ -52,7 +52,7 @@ public class Checkout implements ViewComponent {
 		return panel;
 	}
 
-	private class TreatmentDetail implements ViewComponent {
+	private class TreatmentDetail extends ViewComponent {
 		private TreatmentInterface treatment;
 		//		private PatientInterface patient;
 
@@ -78,7 +78,7 @@ public class Checkout implements ViewComponent {
 		}
 	}
 
-	private class ReceiptButton implements ViewComponent {
+	private class ReceiptButton extends ViewComponent {
 		//		private Receipt receipt;
 		//
 		//		public ReceiptButton(Receipt receipt) {

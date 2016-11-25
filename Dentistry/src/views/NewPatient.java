@@ -11,7 +11,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class NewPatient implements ViewComponent {
+public class NewPatient extends ViewComponent {
 
 	@Override
 	public JPanel getPanel() {
@@ -69,7 +69,7 @@ public class NewPatient implements ViewComponent {
 		return panel;
 	}
 
-	private static class DateField implements ViewComponent {
+	private static class DateField extends ViewComponent {
 		private static final Integer[] DAYS = IntStream.rangeClosed(1, 31).boxed().toArray(Integer[]::new);
 		private static final String[] MONTHS = {"January", "February",
 				"March", "April", "May", "June", "July", "August",

@@ -11,7 +11,7 @@ import javax.swing.JPanel;
 import model.AddressInterface;
 import model.PatientInterface;
 
-public class PatientDetail implements ViewComponent {
+public class PatientDetail extends ViewComponent {
 
 	private PatientInterface patient;
 

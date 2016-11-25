@@ -19,7 +19,7 @@ import javax.swing.SwingConstants;
 import main.Config;
 import model.AppointmentInterface;
 
-public class Diary implements ViewComponent {
+public class Diary extends ViewComponent {
 	private HashMap<DayOfWeek, Day> days;
 
 	public Diary(Iterable<AppointmentInterface> appointments, LocalDate weekStartDate) {
@@ -61,7 +61,7 @@ public class Diary implements ViewComponent {
 		return panel;
 	}
 
-	private class Day implements ViewComponent {
+	private class Day extends ViewComponent {
 		private Vector<AppointmentInterface> appointments;
 		private LocalDate date;
 
@@ -89,7 +89,7 @@ public class Diary implements ViewComponent {
 		}
 	}
 
-	private class AppointmentComponent implements ViewComponent {
+	private class AppointmentComponent extends ViewComponent {
 		private AppointmentInterface appointment;
 
 		public AppointmentComponent(AppointmentInterface appointment) {
@@ -113,7 +113,7 @@ public class Diary implements ViewComponent {
 		}
 	}
 
-	private class AppointmentButtons implements ViewComponent {
+	private class AppointmentButtons extends ViewComponent {
 		private AppointmentInterface appointment;
 
 		public AppointmentButtons(AppointmentInterface appointment) {

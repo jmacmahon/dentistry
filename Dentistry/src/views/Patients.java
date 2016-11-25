@@ -9,7 +9,7 @@ import javax.swing.JSeparator;
 
 import model.PatientInterface;
 
-public class Patients implements ViewComponent {
+public class Patients extends ViewComponent {
 	private List<PatientInterface> patients;
 
 	public Patients(List<PatientInterface> patients) {
@@ -29,7 +29,7 @@ public class Patients implements ViewComponent {
 		return panel;
 	}
 
-	private class Buttons implements ViewComponent {
+	private class Buttons extends ViewComponent {
 		@Override
 		public JPanel getPanel() {
 			JPanel panel = new JPanel();

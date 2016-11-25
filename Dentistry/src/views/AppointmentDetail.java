@@ -12,7 +12,7 @@ import javax.swing.JSeparator;
 
 import model.AppointmentInterface;
 
-public class AppointmentDetail implements ViewComponent {
+public class AppointmentDetail extends ViewComponent {
 	AppointmentInterface appointment;
 
 	public AppointmentDetail(AppointmentInterface appointment) {
