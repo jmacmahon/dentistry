@@ -22,6 +22,16 @@ import model.AppointmentInterface;
 public class Diary extends ViewComponent {
 	private HashMap<DayOfWeek, Day> days;
 
+	public static Diary auto() {
+		LocalDate thisMonday = LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+		LocalDate nextMonday = thisMonday.with(TemporalAdjusters.next(DayOfWeek.MONDAY));
+		return new Diary(
+				AppointmentInterface.getAppointments(
+						thisMonday.atStartOfDay(),
+						nextMonday.atStartOfDay()),
+				thisMonday);
+	}
+
 	public Diary(Iterable<AppointmentInterface> appointments, LocalDate weekStartDate) {
 		// We shouldn't need to do this but I'll leave it just in case
 		// startDate = startDate.with(TemporalAdjusters.previousOrSame(Config.WORKING_WEEK[0]));

@@ -2,6 +2,9 @@ package mock;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.Vector;
 
 import model.AppointmentInterface;
@@ -20,6 +23,18 @@ public class Appointment implements AppointmentInterface {
 			new Appointment(LocalDateTime.of(2016, 11, 22, 15, 0), 45, Patient.MOCK_DATA[3], "Dentist", t3),
 			new Appointment(LocalDateTime.of(2016, 11, 23, 10, 20), 30, Patient.MOCK_DATA[4], "Hygienist", t1),
 	};
+
+	public static Set<AppointmentInterface> deleted = new HashSet<>();
+
+	public static List<AppointmentInterface> getAppointments() {
+		Vector<AppointmentInterface> appointments = new Vector<>();
+		for (Appointment appointment : MOCK_DATA) {
+			if (!deleted.contains(appointment)) {
+				appointments.add(appointment);
+			}
+		}
+		return appointments;
+	}
 
 	private LocalDateTime startTime;
 	private int duration;
