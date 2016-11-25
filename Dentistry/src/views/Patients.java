@@ -10,6 +10,11 @@ import javax.swing.JSeparator;
 import model.PatientInterface;
 
 public class Patients extends ViewComponent {
+	
+	public static void main(String[] args) {
+		
+	
+	
 	private List<PatientInterface> patients;
 
 	public Patients(List<PatientInterface> patients) {
@@ -30,6 +35,8 @@ public class Patients extends ViewComponent {
 		}
 		return panel;
 	}
+
+}
 
 	private class Buttons extends ViewComponent {
 		@Override
