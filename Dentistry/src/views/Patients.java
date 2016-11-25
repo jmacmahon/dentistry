@@ -10,8 +10,6 @@ import javax.swing.JSeparator;
 import model.PatientInterface;
 
 public class Patients extends ViewComponent {
-	
-	public static void main(String[] args) {
 		
 	
 	
