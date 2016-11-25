@@ -21,6 +21,8 @@ public final class Config {
 		SECRETARY,
 	}
 
+	public static final boolean DEBUG = false;
+
 	public static final String DB_URL = "jdbc:mysql://localhost:3306/";
 	public static final String DB_USER = "root";
 	public static final String DB_PASS = "dentistry";

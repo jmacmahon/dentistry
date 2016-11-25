@@ -10,13 +10,12 @@ import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
 
+import controller.Controller;
 import model.PatientInterface;
 
 public class Patients extends ViewComponent {
-		
-	
-	
 	private List<PatientInterface> patients;
+	private JPanel patientList;
 
 	public static Patients auto() {
 		List<PatientInterface> patients = PatientInterface.getAllPatients();
@@ -34,15 +33,23 @@ public class Patients extends ViewComponent {
 		panel.add((new Buttons()).getPanel());
 		panel.add(new SearchText().getPanel());
 		panel.add(new SearchButton().getPanel());
-		for (PatientInterface patient : this.patients) {
-			// TODO maybe scrolling?
-			panel.add(new JSeparator(JSeparator.HORIZONTAL));
-			panel.add((new PatientDetail(patient)).getPanel());
-		}
+		this.patientList = new JPanel();
+		this.patientList.setLayout(new BoxLayout(this.patientList, BoxLayout.PAGE_AXIS));
+		refreshPatientList(this.patients);
+		panel.add(this.patientList);
 		return panel;
 	}
 
-
+	private void refreshPatientList(List<PatientInterface> patients) {
+		this.patientList.removeAll();
+		for (PatientInterface patient : patients) {
+			// TODO maybe scrolling?
+			this.patientList.add(new JSeparator(JSeparator.HORIZONTAL));
+			this.patientList.add((new PatientDetail(patient)).getPanel());
+		}
+		this.patientList.validate();
+		this.patientList.repaint();
+	}
 
 	private class Buttons extends ViewComponent {
 		@Override
@@ -57,38 +64,52 @@ public class Patients extends ViewComponent {
 			return panel;
 		}
 	}
-	
+
+	private JTextField houseNumberField;
+	private JTextField postcodeField;
+
 	private class SearchText extends ViewComponent {
 		@Override
 		public JPanel getPanel() {
 			JPanel panel = new JPanel();
 			panel.setLayout(new GridLayout(0,2));
-			
-			JTextField houseNumber = new JTextField("House Number");
-			JTextField postcode = new JTextField("Postcode");
-			
+
+			houseNumberField = new JTextField();
+			postcodeField = new JTextField();
+
 			panel.add(new JLabel("House Number: "));
-			panel.add(houseNumber);
-			
+			panel.add(houseNumberField);
+
 			panel.add(new JLabel("Postcode: "));
-			panel.add(postcode);
-			
+			panel.add(postcodeField);
+
 			return panel;
-			
 		}
 	}
-	
+
 	private class SearchButton extends ViewComponent {
-		
+		@Override
 		public JPanel getPanel() {
 			JPanel panel = new JPanel();
-			
 			JButton search = new JButton("Search patients");
-		
+
+			search.addActionListener(e -> {
+				if (houseNumberField != null && postcodeField != null) {
+					String houseNumberText = houseNumberField.getText();
+					String postcodeText = postcodeField.getText();
+					Integer houseNumber;
+					try {
+						houseNumber = Integer.parseInt(houseNumberText);
+					} catch (NumberFormatException exc) {
+						houseNumber = null;
+					}
+					List<PatientInterface> filteredPatients = Controller.searchPatients(houseNumber, postcodeText);
+					refreshPatientList(filteredPatients);
+				}
+			});
+
 			panel.add(search);
-			
 			return panel;
 		}
-	
 	}
 }
