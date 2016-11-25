@@ -1,11 +1,14 @@
 package views;
 
+import java.awt.GridLayout;
 import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
+import javax.swing.JTextField;
 
 import model.PatientInterface;
 
@@ -29,7 +32,7 @@ public class Patients extends ViewComponent {
 		JPanel panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
 		panel.add((new Buttons()).getPanel());
-		panel.add(new SearchPatients().getPanel());
+		panel.add(new SearchText().getPanel());
 		panel.add(new SearchButton().getPanel());
 		for (PatientInterface patient : this.patients) {
 			// TODO maybe scrolling?
@@ -39,7 +42,7 @@ public class Patients extends ViewComponent {
 		return panel;
 	}
 
-}
+
 
 	private class Buttons extends ViewComponent {
 		@Override
@@ -50,13 +53,12 @@ public class Patients extends ViewComponent {
 			newPatient.addActionListener(e -> {
 				ViewComponent.spawnInFrame(new NewPatient(), "New Patient");
 			});
-			panel.add(search);
 			panel.add(newPatient);
 			return panel;
 		}
 	}
 	
-	private class SearchText implements ViewComponent {
+	private class SearchText extends ViewComponent {
 		@Override
 		public JPanel getPanel() {
 			JPanel panel = new JPanel();
@@ -76,7 +78,7 @@ public class Patients extends ViewComponent {
 		}
 	}
 	
-private class SearchButton implements ViewComponent {
+	private class SearchButton extends ViewComponent {
 		
 		public JPanel getPanel() {
 			JPanel panel = new JPanel();
