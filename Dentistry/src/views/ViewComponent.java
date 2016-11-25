@@ -22,11 +22,11 @@ public abstract class ViewComponent {
 			@Override
 			public void windowClosing(WindowEvent e) {
 				activeFrames.remove(component);
-				printFrameTitles();
+				//				printFrameTitles();
 			}
 		});
 		activeFrames.put(component, frame);
-		printFrameTitles();
+		//		printFrameTitles();
 		frame.setVisible(true);
 		return frame;
 	}
