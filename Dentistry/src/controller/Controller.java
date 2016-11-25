@@ -7,6 +7,7 @@ import javax.swing.JFrame;
 
 import main.Config;
 import mock.Patient;
+import model.AppointmentInterface;
 import model.PatientInterface;
 import model.db.Database;
 import views.Login;
@@ -32,5 +33,11 @@ public class Controller {
 	public static void entryPoint() {
 		initDB();
 		ViewComponent.spawnInFrame(new Login(), "Dentistry").setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	}
+
+	public static void deleteAppointment(AppointmentInterface appointment) {
+		AppointmentInterface.delete(appointment);
+		ViewComponent.closeAppointment(appointment);
+		ViewComponent.refreshAll();
 	}
 }

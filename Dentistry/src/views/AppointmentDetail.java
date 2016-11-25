@@ -10,13 +10,18 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 
+import controller.Controller;
 import model.AppointmentInterface;
 
 public class AppointmentDetail extends ViewComponent {
-	AppointmentInterface appointment;
+	private AppointmentInterface appointment;
 
 	public AppointmentDetail(AppointmentInterface appointment) {
 		this.appointment = appointment;
+	}
+
+	public AppointmentInterface getAppointment() {
+		return this.appointment;
 	}
 
 	private JPanel getPatientDetails() {
@@ -86,7 +91,7 @@ public class AppointmentDetail extends ViewComponent {
 					JOptionPane.YES_NO_OPTION
 					);
 			if (confirmation == 0) {
-				System.out.println("Delete appointment: " + appointment.toString());
+				Controller.deleteAppointment(appointment);
 			}
 		});
 
