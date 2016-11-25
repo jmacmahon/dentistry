@@ -12,6 +12,11 @@ import model.PatientInterface;
 public class Patients extends ViewComponent {
 	private List<PatientInterface> patients;
 
+	public static Patients auto() {
+		List<PatientInterface> patients = PatientInterface.getAllPatients();
+		return new Patients(patients);
+	}
+
 	public Patients(List<PatientInterface> patients) {
 		this.patients = patients;
 	}
