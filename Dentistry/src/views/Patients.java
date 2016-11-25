@@ -45,5 +45,5 @@ public class Patients extends ViewComponent {
 		}
 	}
 
-heyy
+:)
 }
