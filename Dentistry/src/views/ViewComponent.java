@@ -3,15 +3,36 @@ package views;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map.Entry;
+import java.util.Vector;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import model.AppointmentInterface;
+
 public abstract class ViewComponent {
+	private List<ViewComponent> children;
 	public abstract JPanel getPanel();
 
-	public static HashMap<ViewComponent, JFrame> activeFrames = new HashMap<>();
+	protected void addChild(ViewComponent component) {
+		if (this.children == null) {
+			this.children = new Vector<>();
+		}
+		children.add(component);
+	}
+
+	public void refresh() {
+		if (this.children == null) {
+			return;
+		}
+		for (ViewComponent child : children) {
+			child.refresh();
+		}
+	}
+
+	private static HashMap<ViewComponent, JFrame> activeFrames = new HashMap<>();
 
 	public static JFrame spawnInFrame(ViewComponent component, String title) {
 		JFrame frame = new JFrame(title);
@@ -22,32 +43,28 @@ public abstract class ViewComponent {
 			@Override
 			public void windowClosing(WindowEvent e) {
 				activeFrames.remove(component);
-				//				printFrameTitles();
 			}
 		});
 		activeFrames.put(component, frame);
-		//		printFrameTitles();
 		frame.setVisible(true);
 		return frame;
 	}
 
-	private static void refreshFrame(ViewComponent component, JFrame frame) {
-		frame.getContentPane().removeAll();
-		frame.getContentPane().add(component.getPanel());
-		frame.pack();
-		frame.setVisible(true);
-	}
-
-	public static void refreshAllFrames() {
-		for (Entry<ViewComponent, JFrame> e : activeFrames.entrySet()) {
-			refreshFrame(e.getKey(), e.getValue());
+	public static void refreshAll() {
+		for (ViewComponent component : activeFrames.keySet()) {
+			component.refresh();
 		}
 	}
 
-	private static void printFrameTitles() {
-		for (Entry<ViewComponent, JFrame> e : activeFrames.entrySet()) {
-			System.out.println(e.getValue().getTitle());
+	public static void closeAppointment(AppointmentInterface appointment) {
+		for (Entry<ViewComponent, JFrame> entry : activeFrames.entrySet()) {
+			if (entry.getKey() instanceof AppointmentDetail) {
+				AppointmentDetail detail = (AppointmentDetail)entry.getKey();
+				if (detail.getAppointment() == appointment) {
+					JFrame frame = entry.getValue();
+					frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
+				}
+			}
 		}
-		System.out.println("---");
 	}
 }
