@@ -4,21 +4,44 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public abstract class Appointment {
-	public abstract LocalDateTime getStartTime();
+	private LocalDateTime startTime;
+	private int duration;
+	private Patient patient;
+	private String partnerName;
+	private int id;
+	private List<Treatment> treatments;
+
+	public Appointment(LocalDateTime startTime, int duration, Patient patient, String partnerName, int id,
+			List<Treatment> treatments) {
+		super();
+		this.startTime = startTime;
+		this.duration = duration;
+		this.patient = patient;
+		this.partnerName = partnerName;
+		this.id = id;
+		this.treatments = treatments;
+	}
+	public LocalDateTime getStartTime() {
+		return startTime;
+	}
+	public int getDuration() {
+		return duration;
+	}
+	public Patient getPatient() {
+		return patient;
+	}
+	public String getPartnerName() {
+		return partnerName;
+	}
+	public int getId() {
+		return id;
+	}
+	public List<Treatment> getTreatments() {
+		return treatments;
+	}
 
 	public abstract LocalDateTime getEndTime();
-
-	public abstract int getDurationMinutes();
-
 	public abstract String getPatientName();
-
-	public abstract String getPartnerName();
-
-	public abstract String getID();
-
-	public abstract List<Treatment> getTreatments();
-
-	public abstract Patient getPatient();
 
 	@SuppressWarnings("unchecked")
 	public static List<Appointment> getAppointments(LocalDateTime from, LocalDateTime to) {

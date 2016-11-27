@@ -7,9 +7,22 @@ public abstract class Treatment {
 		REPAIR_WORK,
 	}
 
-	public abstract String getName();
-
-	public abstract int getCost();
-
-	public abstract TreatmentType getType();
+	private String name;
+	private TreatmentType type;
+	private int cost;
+	public Treatment(String name, TreatmentType type, int cost) {
+		super();
+		this.name = name;
+		this.type = type;
+		this.cost = cost;
+	}
+	public String getName() {
+		return name;
+	}
+	public TreatmentType getType() {
+		return type;
+	}
+	public int getCost() {
+		return cost;
+	}
 }
