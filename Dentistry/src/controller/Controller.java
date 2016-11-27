@@ -39,10 +39,4 @@ public class Controller {
 		ViewComponent.closeAppointment(appointment);
 		ViewComponent.refreshAll();
 	}
-
-	public static List<Patient> searchPatients(Integer houseNumber, String postcode) {
-		Vector<Patient> patients = new Vector<>();
-		patients.add(mock.Patient.MOCK_DATA[0]);
-		return patients;
-	}
 }

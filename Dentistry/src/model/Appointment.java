@@ -39,7 +39,22 @@ public class Appointment {
 		return id;
 	}
 	public List<Treatment> getTreatments() {
-		return null;
+		if (Config.MOCK) {
+			return new Vector<>();
+		} else {
+			try {
+				ResultSet results = model.db.Queries.getTreatmentsForAppointment(this.getId());
+				Vector<Treatment> treatments = new Vector<>();
+				while (results.next()) {
+					treatments.add(Treatment.fromResultSet(results, results.getInt("treatmentId")));
+				}
+				return treatments;
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return null;
+		}
 	}
 
 	public LocalDateTime getEndTime() {
@@ -69,12 +84,8 @@ public class Appointment {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	public static List<Appointment> getAllAppointments() {
-		return (List<Appointment>)(List<?>) mock.Appointment.getAppointments();
-	}
-
 	public static void delete(Appointment appointment) {
+		// TODO
 		mock.Appointment.deleted.add((mock.Appointment) appointment);
 	}
 
@@ -84,7 +95,7 @@ public class Appointment {
 					result.getInt("appointment.id"),
 					result.getTimestamp("appointment.date").toLocalDateTime(),
 					result.getInt("appointment.duration"),
-					Patient.fromResultSet(result),
+					Patient.fromResultSet(result, result.getInt("appointment.patientId")),
 					result.getString("partner.surname"));
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

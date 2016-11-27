@@ -10,7 +10,6 @@ import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
 
-import controller.Controller;
 import model.Patient;
 
 public class Patients extends ViewComponent {
@@ -48,7 +47,7 @@ public class Patients extends ViewComponent {
 			this.patientList.add(new JSeparator(JSeparator.HORIZONTAL));
 			this.patientList.add((new PatientDetail(patient)).getPanel());
 		}
-		this.patientList.validate();
+		this.patientList.revalidate();
 		this.patientList.repaint();
 	}
 
@@ -66,6 +65,8 @@ public class Patients extends ViewComponent {
 		}
 	}
 
+	private JTextField forenameField;
+	private JTextField surnameField;
 	private JTextField houseNumberField;
 	private JTextField postcodeField;
 
@@ -75,8 +76,16 @@ public class Patients extends ViewComponent {
 			JPanel panel = new JPanel();
 			panel.setLayout(new GridLayout(0,2));
 
+			forenameField = new JTextField();
+			surnameField = new JTextField();
 			houseNumberField = new JTextField();
 			postcodeField = new JTextField();
+
+			panel.add(new JLabel("Forename"));
+			panel.add(forenameField);
+
+			panel.add(new JLabel("Surname"));
+			panel.add(surnameField);
 
 			panel.add(new JLabel("House Number: "));
 			panel.add(houseNumberField);
@@ -98,13 +107,15 @@ public class Patients extends ViewComponent {
 				if (houseNumberField != null && postcodeField != null) {
 					String houseNumberText = houseNumberField.getText();
 					String postcodeText = postcodeField.getText();
+					String forenameText = forenameField.getText();
+					String surnameText = surnameField.getText();
 					Integer houseNumber;
 					try {
 						houseNumber = Integer.parseInt(houseNumberText);
 					} catch (NumberFormatException exc) {
 						houseNumber = null;
 					}
-					List<Patient> filteredPatients = Controller.searchPatients(houseNumber, postcodeText);
+					List<Patient> filteredPatients = Patient.search(forenameText, surnameText, houseNumber, postcodeText);
 					refreshPatientList(filteredPatients);
 				}
 			});

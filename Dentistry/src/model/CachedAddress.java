@@ -1,8 +1,5 @@
 package model;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
 public class CachedAddress extends Address {
 	private int id;
 	private int houseNumber;
@@ -43,19 +40,5 @@ public class CachedAddress extends Address {
 	@Override
 	public String getPostcode() {
 		return postcode;
-	}
-
-	public static Address fromResultSet(ResultSet results, int id) {
-		try {
-			return new CachedAddress(
-					results.getInt("address.id"),
-					results.getInt("address.houseNumber"),
-					results.getString("address.streetName"),
-					results.getString("address.districtName"),
-					results.getString("address.cityName"),
-					results.getString("address.postcode"));
-		} catch (SQLException e) {
-			return new Address(id);
-		}
 	}
 }

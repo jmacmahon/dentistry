@@ -4,7 +4,7 @@ import java.time.LocalDate;
 
 import model.Address;
 
-public class Patient extends model.Patient {
+public class Patient extends model.CachedPatient {
 	public Patient(String forename, String surname, String title, LocalDate dateOfBirth,
 			Address address) {
 		super(0, forename, surname, title, "01234567890", dateOfBirth, address);

@@ -16,7 +16,7 @@ public class Address {
 			try {
 				ResultSet results = model.db.Queries.getAddress(this.id);
 				results.next();
-				Address shouldBeCached = CachedAddress.fromResultSet(results, this.id);
+				Address shouldBeCached = Address.fromResultSet(results, this.id);
 				if (shouldBeCached instanceof CachedAddress) {
 					this.cached = (CachedAddress) shouldBeCached;
 				} else {
@@ -50,5 +50,19 @@ public class Address {
 	}
 	public String getPostcode() {
 		return this.getCachedAddress().getPostcode();
+	}
+
+	public static Address fromResultSet(ResultSet results, int id) {
+		try {
+			return new CachedAddress(
+					results.getInt("address.id"),
+					results.getInt("address.houseNumber"),
+					results.getString("address.streetName"),
+					results.getString("address.districtName"),
+					results.getString("address.cityName"),
+					results.getString("address.postcode"));
+		} catch (SQLException e) {
+			return new Address(id);
+		}
 	}
 }
