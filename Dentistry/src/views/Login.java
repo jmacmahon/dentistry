@@ -43,7 +43,9 @@ public class Login extends ViewComponent {
 			panel.add(dentist.getPanel());
 			break;
 		case HYGIENIST:
-			panel.add(new JLabel("hygienist view"));
+			Hygienist hygienist = new Hygienist();
+			this.addChild(hygienist);
+			panel.add(hygienist.getPanel());
 			break;
 		case SECRETARY:
 			Secretary secretary = new Secretary();
