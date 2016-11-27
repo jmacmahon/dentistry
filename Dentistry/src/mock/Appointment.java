@@ -36,25 +36,15 @@ public class Appointment extends model.Appointment {
 
 	public static Appointment withTreatmentIndices(LocalDateTime startTime, int duration, Patient patient, String partnerName,
 			int[] treatmentsIndices) {
+		// TODO This is useless now we don't specify treatments in the constructor
 		Vector<Treatment> treatments = new Vector<>();
 		for (int treatmentIndex : treatmentsIndices) {
 			treatments.add(mock.Treatment.MOCK_DATA[treatmentIndex]);
 		}
-		return new Appointment(startTime, duration, patient, partnerName, -1, treatments);
+		return new Appointment(-1, startTime, duration, patient, partnerName);
 	}
 
-	public Appointment(LocalDateTime startTime, int duration, Patient patient, String partnerName, int id,
-			List<Treatment> treatments) {
-		super(startTime, duration, patient, partnerName, id, treatments);
-	}
-
-	@Override
-	public LocalDateTime getEndTime() {
-		return this.getStartTime().plusMinutes(this.getDuration());
-	}
-
-	@Override
-	public String getPatientName() {
-		return this.getPatient().getSurname() + ", " + this.getPatient().getForename();
+	public Appointment(int id, LocalDateTime startTime, int duration, Patient patient, String partnerName) {
+		super(id, startTime, duration, patient, partnerName);
 	}
 }

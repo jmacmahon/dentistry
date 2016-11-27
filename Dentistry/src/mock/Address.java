@@ -1,8 +1,8 @@
 package mock;
 
-public class Address extends model.Address {
+public class Address extends model.CachedAddress {
 	public Address(int houseNumber, String streetName, String districtName, String cityName, String postcode) {
-		super(houseNumber, streetName, districtName, cityName, postcode);
+		super(0, houseNumber, streetName, districtName, cityName, postcode);
 	}
 
 	public static final Address[] MOCK_DATA = {

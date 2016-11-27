@@ -26,6 +26,7 @@ public final class Config {
 	public static Database db;
 
 	public static final boolean DEBUG = true;
+	public static final boolean MOCK = true;
 
 	public static final String DB_URL = "jdbc:mysql://localhost:3306/";
 	public static final String DB_USER = "dentistry";

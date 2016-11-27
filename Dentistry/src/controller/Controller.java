@@ -25,8 +25,8 @@ public class Controller {
 	}
 
 	public static void initDB() {
-		db = new Database(Config.DB_URL, Config.DB_USER, Config.DB_PASS);
-		db.init();
+		Config.db = new Database(Config.DB_URL, Config.DB_USER, Config.DB_PASS);
+		Config.db.init();
 	}
 
 	public static void entryPoint() {

@@ -2,6 +2,7 @@ package model.db;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -21,6 +22,10 @@ public class Database {
 		this.user = user;
 		this.pass = pass;
 		this.dburl = url + Config.DB_NAME + Config.DB_PROPERTIES;
+	}
+
+	public ResultSet runQuery(String query) throws SQLException {
+		return this.connection.createStatement().executeQuery(query);
 	}
 
 	public void init() {

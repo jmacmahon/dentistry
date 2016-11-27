@@ -1,6 +1,8 @@
 package model;
 
-public abstract class Treatment {
+import java.sql.ResultSet;
+
+public class Treatment {
 	public static enum TreatmentType {
 		HYGIENE_VISIT,
 		CHECK_UP,
@@ -24,5 +26,9 @@ public abstract class Treatment {
 	}
 	public int getCost() {
 		return cost;
+	}
+
+	public static Treatment fromResultSet(ResultSet result) {
+		return null;
 	}
 }
