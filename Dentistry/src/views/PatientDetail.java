@@ -12,10 +12,10 @@ import model.Address;
 import model.Patient;
 
 public class PatientDetail extends ViewComponent {
-
 	private Patient patient;
 
 	public PatientDetail(Patient patient) {
+		super();
 		this.patient = patient;
 	}
 

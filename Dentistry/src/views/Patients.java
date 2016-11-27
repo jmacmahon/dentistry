@@ -23,6 +23,7 @@ public class Patients extends ViewComponent {
 	}
 
 	public Patients(List<Patient> patients) {
+		super();
 		this.patients = patients;
 	}
 

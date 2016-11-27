@@ -18,6 +18,7 @@ public class Checkout extends ViewComponent {
 	private Patient patient;
 
 	public Checkout(List<Treatment> treatments, Patient patient) {
+		super();
 		this.treatments = treatments;
 		this.patient = patient;
 	}

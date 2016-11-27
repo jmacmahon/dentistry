@@ -8,9 +8,6 @@ import java.time.temporal.TemporalAdjusters;
 import java.util.HashMap;
 import java.util.Vector;
 
-import java.awt.Color;
-import java.awt.Font;
-
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -36,6 +33,7 @@ public class Diary extends ViewComponent {
 	}
 
 	public Diary(Iterable<Appointment> appointments, LocalDate weekStartDate) {
+		super();
 		// We shouldn't need to do this but I'll leave it just in case
 		// startDate = startDate.with(TemporalAdjusters.previousOrSame(Config.WORKING_WEEK[0]));
 		LocalDate weekEndDate = weekStartDate.plusDays(Config.WORKING_WEEK_DAYS.length);

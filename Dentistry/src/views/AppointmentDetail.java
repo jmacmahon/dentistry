@@ -17,6 +17,7 @@ public class AppointmentDetail extends ViewComponent {
 	private Appointment appointment;
 
 	public AppointmentDetail(Appointment appointment) {
+		super();
 		this.appointment = appointment;
 	}
 

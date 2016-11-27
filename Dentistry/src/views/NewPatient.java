@@ -12,7 +12,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 public class NewPatient extends ViewComponent {
-
 	@Override
 	public JPanel getPanel() {
 		JPanel panel = new JPanel();
