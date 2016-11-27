@@ -57,9 +57,4 @@ public class Appointment extends model.Appointment {
 	public String getPatientName() {
 		return this.getPatient().getSurname() + ", " + this.getPatient().getForename();
 	}
-
-	@Override
-	public Patient getPatient() {
-		return this.getPatient();
-	}
 }
