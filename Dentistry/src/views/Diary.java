@@ -20,7 +20,7 @@ import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
 
 import main.Config;
-import model.AppointmentInterface;
+import model.Appointment;
 
 public class Diary extends ViewComponent {
 	private HashMap<DayOfWeek, Day> days;
@@ -29,13 +29,13 @@ public class Diary extends ViewComponent {
 		LocalDate thisMonday = LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
 		LocalDate nextMonday = thisMonday.with(TemporalAdjusters.next(DayOfWeek.MONDAY));
 		return new Diary(
-				AppointmentInterface.getAppointments(
+				Appointment.getAppointments(
 						thisMonday.atStartOfDay(),
 						nextMonday.atStartOfDay()),
 				thisMonday);
 	}
 
-	public Diary(Iterable<AppointmentInterface> appointments, LocalDate weekStartDate) {
+	public Diary(Iterable<Appointment> appointments, LocalDate weekStartDate) {
 		// We shouldn't need to do this but I'll leave it just in case
 		// startDate = startDate.with(TemporalAdjusters.previousOrSame(Config.WORKING_WEEK[0]));
 		LocalDate weekEndDate = weekStartDate.plusDays(Config.WORKING_WEEK_DAYS.length);
@@ -44,20 +44,20 @@ public class Diary extends ViewComponent {
 		// Populate the hashmap with empty days
 		for (DayOfWeek dayOfWeek : Config.WORKING_WEEK_DAYS) {
 			Day day = new Day(
-					new Vector<AppointmentInterface>(),
+					new Vector<Appointment>(),
 					weekStartDate.with(TemporalAdjusters.nextOrSame(dayOfWeek))
 					);
 			this.days.put(dayOfWeek, day);
 		}
 
 		// Sort the appointments into days
-		for (AppointmentInterface appointment : appointments) {
+		for (Appointment appointment : appointments) {
 			LocalDateTime startTime = appointment.getStartTime();
 			DayOfWeek apptDay = startTime.getDayOfWeek();
 			if (startTime.isAfter(weekStartDate.atTime(0, 0))
 					&& startTime.isBefore(weekEndDate.atTime(23, 59))) {
 				if (!this.days.containsKey(appointment.getStartTime().getDayOfWeek())) {
-					this.days.put(apptDay, new Day(new Vector<AppointmentInterface>(), startTime.toLocalDate()));
+					this.days.put(apptDay, new Day(new Vector<Appointment>(), startTime.toLocalDate()));
 				}
 				this.days.get(apptDay).addAppointment(appointment);
 			}
@@ -75,15 +75,15 @@ public class Diary extends ViewComponent {
 	}
 
 	private class Day extends ViewComponent {
-		private Vector<AppointmentInterface> appointments;
+		private Vector<Appointment> appointments;
 		private LocalDate date;
 
-		public Day(Vector<AppointmentInterface> appointments, LocalDate date) {
+		public Day(Vector<Appointment> appointments, LocalDate date) {
 			this.appointments = appointments;
 			this.date = date;
 		}
 
-		public void addAppointment(AppointmentInterface appointment) {
+		public void addAppointment(Appointment appointment) {
 			this.appointments.add(appointment);
 		}
 
@@ -95,7 +95,7 @@ public class Diary extends ViewComponent {
 			panel.add(new JLabel(this.date.format(DateTimeFormatter.ofPattern("EEEE"))));
 			panel.add(new JLabel(this.date.format(DateTimeFormatter.ofPattern("dd MMM yyyy"))));
 			panel.add(new JSeparator(SwingConstants.HORIZONTAL));
-			for (AppointmentInterface appointment : appointments) {
+			for (Appointment appointment : appointments) {
 				panel.add((new AppointmentComponent(appointment)).getPanel());
 			}
 			return panel;
@@ -103,9 +103,9 @@ public class Diary extends ViewComponent {
 	}
 
 	private class AppointmentComponent extends ViewComponent {
-		private AppointmentInterface appointment;
+		private Appointment appointment;
 
-		public AppointmentComponent(AppointmentInterface appointment) {
+		public AppointmentComponent(Appointment appointment) {
 			this.appointment = appointment;
 		}
 
@@ -127,9 +127,9 @@ public class Diary extends ViewComponent {
 	}
 
 	private class AppointmentButtons extends ViewComponent {
-		private AppointmentInterface appointment;
+		private Appointment appointment;
 
-		public AppointmentButtons(AppointmentInterface appointment) {
+		public AppointmentButtons(Appointment appointment) {
 			this.appointment = appointment;
 		}
 

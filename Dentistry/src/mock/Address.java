@@ -1,8 +1,6 @@
 package mock;
 
-import model.AddressInterface;
-
-public class Address implements AddressInterface {
+public class Address extends model.Address {
 	public static final Address[] MOCK_DATA = {
 			new Address(4, "Privet Drive", "Little Whinging", "Surrey", "GU15 1AE"),
 			new Address(12, "Western Bank", "", "Sheffield", "S10 2AA"),

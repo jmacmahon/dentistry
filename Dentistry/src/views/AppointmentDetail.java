@@ -11,16 +11,16 @@ import javax.swing.JPanel;
 import javax.swing.JSeparator;
 
 import controller.Controller;
-import model.AppointmentInterface;
+import model.Appointment;
 
 public class AppointmentDetail extends ViewComponent {
-	private AppointmentInterface appointment;
+	private Appointment appointment;
 
-	public AppointmentDetail(AppointmentInterface appointment) {
+	public AppointmentDetail(Appointment appointment) {
 		this.appointment = appointment;
 	}
 
-	public AppointmentInterface getAppointment() {
+	public Appointment getAppointment() {
 		return this.appointment;
 	}
 

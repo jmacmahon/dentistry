@@ -1,20 +1,18 @@
 package mock;
 
-import model.TreatmentInterface;
-
-public class Treatment implements TreatmentInterface {
+public class Treatment extends model.Treatment {
 	public static final Treatment[] MOCK_DATA = {
-			new Treatment(2000, "Jimmies rustled", "type?"),
-			new Treatment(10000, "Screw caps adjusted", "type?"),
-			new Treatment(20, "Free sticker", "type?"),
-			new Treatment(4500, "Mystery box", "type?"),
+			new Treatment(2000, "Jimmies rustled", TreatmentType.HYGIENE_VISIT),
+			new Treatment(10000, "Screw caps adjusted", TreatmentType.CHECK_UP),
+			new Treatment(20, "Free sticker", TreatmentType.CHECK_UP),
+			new Treatment(4500, "Mystery box", TreatmentType.REPAIR_WORK),
 	};
 
 	private int cost;
 	private String name;
-	private String type;
+	private TreatmentType type;
 
-	public Treatment(int cost, String name, String type) {
+	public Treatment(int cost, String name, TreatmentType type) {
 		this.cost = cost;
 		this.name = name;
 		this.type = type;
@@ -29,7 +27,7 @@ public class Treatment implements TreatmentInterface {
 		return name;
 	}
 	@Override
-	public String getType() {
+	public TreatmentType getType() {
 		return type;
 	}
 }

@@ -8,14 +8,14 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import model.AddressInterface;
-import model.PatientInterface;
+import model.Address;
+import model.Patient;
 
 public class PatientDetail extends ViewComponent {
 
-	private PatientInterface patient;
+	private Patient patient;
 
-	public PatientDetail(PatientInterface patient) {
+	public PatientDetail(Patient patient) {
 		this.patient = patient;
 	}
 
@@ -40,7 +40,7 @@ public class PatientDetail extends ViewComponent {
 	private JPanel getRightPanel() {
 		JPanel rightPanel = new JPanel();
 		rightPanel.add(new JLabel("Address:"));
-		AddressInterface address = this.patient.getAddress();
+		Address address = this.patient.getAddress();
 		rightPanel.add(new JLabel(
 				"<html>" + address.getHouseNumber() + " " + address.getStreetName()
 				+ "<br />" + address.getDistrictName()

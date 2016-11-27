@@ -10,7 +10,7 @@ import java.util.Vector;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import model.AppointmentInterface;
+import model.Appointment;
 
 public abstract class ViewComponent {
 	private List<ViewComponent> children;
@@ -56,7 +56,7 @@ public abstract class ViewComponent {
 		}
 	}
 
-	public static void closeAppointment(AppointmentInterface appointment) {
+	public static void closeAppointment(Appointment appointment) {
 		for (Entry<ViewComponent, JFrame> entry : activeFrames.entrySet()) {
 			if (entry.getKey() instanceof AppointmentDetail) {
 				AppointmentDetail detail = (AppointmentDetail)entry.getKey();

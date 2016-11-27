@@ -11,18 +11,18 @@ import javax.swing.JSeparator;
 import javax.swing.JTextField;
 
 import controller.Controller;
-import model.PatientInterface;
+import model.Patient;
 
 public class Patients extends ViewComponent {
-	private List<PatientInterface> patients;
+	private List<Patient> patients;
 	private JPanel patientList;
 
 	public static Patients auto() {
-		List<PatientInterface> patients = PatientInterface.getAllPatients();
+		List<Patient> patients = Patient.getAllPatients();
 		return new Patients(patients);
 	}
 
-	public Patients(List<PatientInterface> patients) {
+	public Patients(List<Patient> patients) {
 		this.patients = patients;
 	}
 
@@ -40,9 +40,9 @@ public class Patients extends ViewComponent {
 		return panel;
 	}
 
-	private void refreshPatientList(List<PatientInterface> patients) {
+	private void refreshPatientList(List<Patient> patients) {
 		this.patientList.removeAll();
-		for (PatientInterface patient : patients) {
+		for (Patient patient : patients) {
 			// TODO maybe scrolling?
 			this.patientList.add(new JSeparator(JSeparator.HORIZONTAL));
 			this.patientList.add((new PatientDetail(patient)).getPanel());
@@ -103,7 +103,7 @@ public class Patients extends ViewComponent {
 					} catch (NumberFormatException exc) {
 						houseNumber = null;
 					}
-					List<PatientInterface> filteredPatients = Controller.searchPatients(houseNumber, postcodeText);
+					List<Patient> filteredPatients = Controller.searchPatients(houseNumber, postcodeText);
 					refreshPatientList(filteredPatients);
 				}
 			});

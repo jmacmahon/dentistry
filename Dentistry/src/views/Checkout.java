@@ -10,14 +10,14 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 
-import model.PatientInterface;
-import model.TreatmentInterface;
+import model.Patient;
+import model.Treatment;
 
 public class Checkout extends ViewComponent {
-	private List<TreatmentInterface> treatments;
-	private PatientInterface patient;
+	private List<Treatment> treatments;
+	private Patient patient;
 
-	public Checkout(List<TreatmentInterface> treatments, PatientInterface patient) {
+	public Checkout(List<Treatment> treatments, Patient patient) {
 		this.treatments = treatments;
 		this.patient = patient;
 	}
@@ -28,7 +28,7 @@ public class Checkout extends ViewComponent {
 		panel.add(new JLabel("Total:"));
 
 		int total = 0;
-		for (TreatmentInterface treatment : this.treatments) {
+		for (Treatment treatment : this.treatments) {
 			total += treatment.getCost();
 		}
 
@@ -43,7 +43,7 @@ public class Checkout extends ViewComponent {
 
 		JPanel panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
-		for (TreatmentInterface treatment : this.treatments) {
+		for (Treatment treatment : this.treatments) {
 			panel.add((new TreatmentDetail(treatment, this.patient)).getPanel());
 			panel.add(new JSeparator(JSeparator.HORIZONTAL));
 		}
@@ -53,10 +53,10 @@ public class Checkout extends ViewComponent {
 	}
 
 	private class TreatmentDetail extends ViewComponent {
-		private TreatmentInterface treatment;
+		private Treatment treatment;
 		//		private PatientInterface patient;
 
-		public TreatmentDetail(TreatmentInterface treatment, PatientInterface patient) {
+		public TreatmentDetail(Treatment treatment, Patient patient) {
 			this.treatment = treatment;
 			//			this.patient = patient;
 		}
@@ -69,7 +69,8 @@ public class Checkout extends ViewComponent {
 			panel.add(new JLabel(this.treatment.getName()));
 
 			panel.add(new JLabel("Treatment type:"));
-			panel.add(new JLabel(this.treatment.getType()));
+			panel.add(new JLabel("not yet implemented"));
+			//			panel.add(new JLabel(this.treatment.getType()));
 
 			panel.add(new JLabel("Treatment cost:"));
 			double costInPounds = this.treatment.getCost() / 100.0;
