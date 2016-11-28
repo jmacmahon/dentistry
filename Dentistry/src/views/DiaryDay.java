@@ -22,15 +22,16 @@ import model.Appointment;
 public class DiaryDay extends ViewComponent {
 	private HashMap<DayOfWeek, Day> days;
 
-	public static DiaryDay single() {
+	public static DiaryDay single(int partnerId) {
 		LocalDate thisDay = LocalDate.now();
 		System.out.println(thisDay);
 		LocalDate nextDay = LocalDate.now().plusDays(1);
 		System.out.println(nextDay);
 		return new DiaryDay(
-				Appointment.getAppointments(
+				Appointment.getPartnerAppointments(
 						thisDay.atStartOfDay(),
-						nextDay.atStartOfDay()),
+						nextDay.atStartOfDay(),
+						partnerId),
 				thisDay);
 	}
 
@@ -52,8 +53,6 @@ public class DiaryDay extends ViewComponent {
 			this.days.put(dayOfWeek, day);
 		}
 
-
-
 		// Sort the appointments into days
 		for (Appointment appointment : appointments) {
 			LocalDateTime startTime = appointment.getStartTime();
@@ -72,9 +71,7 @@ public class DiaryDay extends ViewComponent {
 	public JPanel getPanel() {
 		JPanel panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel, BoxLayout.LINE_AXIS));
-		for (DayOfWeek dayOfWeek : Config.WORKING_WEEK_DAYS) {
-			panel.add(this.days.get(dayOfWeek).getPanel());
-		}
+		panel.add(this.days.get(LocalDate.now().getDayOfWeek()).getPanel());
 		return panel;
 	}
 
