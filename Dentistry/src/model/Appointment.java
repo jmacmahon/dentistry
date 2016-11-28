@@ -88,7 +88,12 @@ public class Appointment {
 		if (Config.MOCK) {
 			mock.Appointment.deleted.add((mock.Appointment) appointment);
 		} else {
-			// TODO
+			try {
+				model.db.Queries.deleteAppointment(appointment.getId());
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 

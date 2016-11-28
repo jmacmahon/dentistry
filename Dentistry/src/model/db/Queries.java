@@ -154,4 +154,8 @@ public class Queries {
 		Config.db.runQuery(query);
 		return Config.db.runQuery("SELECT id FROM appointment ORDER BY id DESC LIMIT 1;");
 	}
+
+	public static void deleteAppointment(int appointmentId) throws SQLException {
+		Config.db.runQuery("DELETE FROM appointment WHERE appointment.id = " + Integer.toString(appointmentId) + ";");
+	}
 }
