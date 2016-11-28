@@ -1,8 +1,6 @@
 package views;
 
-import java.awt.Color;
 import java.time.DayOfWeek;
-import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -20,46 +18,30 @@ import javax.swing.SwingConstants;
 
 import main.Config;
 import model.Appointment;
+import views.Diary.Day;
 
-public class Diary extends ViewComponent {
+public class DiaryDay extends ViewComponent {
 	private HashMap<DayOfWeek, Day> days;
 
-	public static Diary auto() {
-		LocalDate thisMonday = LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
-		LocalDate nextMonday = thisMonday.with(TemporalAdjusters.next(DayOfWeek.MONDAY));
-		return new Diary(
-				Appointment.getAppointments(
-						thisMonday.atStartOfDay(),
-						nextMonday.atStartOfDay()),
-				thisMonday);
-	}
-
-	public static Diary partnerAuto(int partnerId) {
-		LocalDate thisMonday = LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
-		LocalDate nextMonday = thisMonday.with(TemporalAdjusters.next(DayOfWeek.MONDAY));
-		return new Diary(
-				Appointment.getPartnerAppointments(
-						thisMonday.atStartOfDay(),
-						nextMonday.atStartOfDay(),
-						partnerId),
-				thisMonday);
-	}
-
-	public static Diary single() {
+	public static DiaryDay single() {
 		LocalDate thisDay = LocalDate.now();
-		LocalDate nextDay = thisDay.with(TemporalAdjusters.next(null));
-		return new Diary(
+		System.out.println(thisDay);
+		LocalDate nextDay = LocalDate.now().plusDays(1);
+		System.out.println(nextDay);
+		return new DiaryDay(
 				Appointment.getAppointments(
 						thisDay.atStartOfDay(),
 						nextDay.atStartOfDay()),
 				thisDay);
 	}
 
-	public Diary(Iterable<Appointment> appointments, LocalDate weekStartDate) {
+
+	
+	public DiaryDay(Iterable<Appointment> appointments, LocalDate weekStartDate) {
 		super();
 		// We shouldn't need to do this but I'll leave it just in case
 		// startDate = startDate.with(TemporalAdjusters.previousOrSame(Config.WORKING_WEEK[0]));
-		LocalDate weekEndDate = weekStartDate.plusDays(Config.WORKING_WEEK_DAYS.length);
+		LocalDate weekEndDate = weekStartDate.plusDays(1);
 		this.days = new HashMap<DayOfWeek, Day>();
 
 		// Populate the hashmap with empty days
@@ -70,6 +52,8 @@ public class Diary extends ViewComponent {
 					);
 			this.days.put(dayOfWeek, day);
 		}
+
+		
 
 		// Sort the appointments into days
 		for (Appointment appointment : appointments) {
@@ -87,17 +71,11 @@ public class Diary extends ViewComponent {
 
 	@Override
 	public JPanel getPanel() {
-		JPanel buttonsPanel = (new DiaryButtons()).getPanel();
-		JPanel dayPanel = new JPanel();
-		dayPanel.setLayout(new BoxLayout(dayPanel, BoxLayout.LINE_AXIS));
-		for (DayOfWeek dayOfWeek : Config.WORKING_WEEK_DAYS) {
-			dayPanel.add(this.days.get(dayOfWeek).getPanel());
-		}
-
 		JPanel panel = new JPanel();
-		panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
-		panel.add(buttonsPanel);
-		panel.add(dayPanel);
+		panel.setLayout(new BoxLayout(panel, BoxLayout.LINE_AXIS));
+		for (DayOfWeek dayOfWeek : Config.WORKING_WEEK_DAYS) {
+			panel.add(this.days.get(dayOfWeek).getPanel());
+		}
 		return panel;
 	}
 
@@ -121,22 +99,9 @@ public class Diary extends ViewComponent {
 			panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
 			panel.add(new JLabel(this.date.format(DateTimeFormatter.ofPattern("EEEE"))));
 			panel.add(new JLabel(this.date.format(DateTimeFormatter.ofPattern("dd MMM yyyy"))));
-			panel.add(new JSeparator(JSeparator.HORIZONTAL));
-			Appointment previous = null;
+			panel.add(new JSeparator(SwingConstants.HORIZONTAL));
 			for (Appointment appointment : appointments) {
-				if (previous != null) {
-					Duration diff = Duration.between(previous.getEndTime(), appointment.getStartTime());
-					if (diff.toMinutes() >= 5) {
-						JLabel gap = new JLabel("Gap of " + diff.toMinutes() + " minutes");
-						gap.setBackground(Color.PINK);
-						gap.setOpaque(true);
-						panel.add(gap);
-						panel.add(new JPanel());
-						panel.add(new JSeparator(JSeparator.HORIZONTAL));
-					}
-				}
 				panel.add((new AppointmentComponent(appointment)).getPanel());
-				previous = appointment;
 			}
 			return panel;
 		}
@@ -159,7 +124,7 @@ public class Diary extends ViewComponent {
 					+ this.appointment.getEndTime().format(DateTimeFormatter.ofPattern("HH:mm"))
 					));
 			panel.add(new JLabel("Patient: " + this.appointment.getPatientName()));
-			panel.add(new JLabel("Partner: " + appointment.getPartner().toString()));
+			panel.add(new JLabel("Partner: " + appointment.getPartnerName()));
 			panel.add((new AppointmentButtons(this.appointment)).getPanel());
 			panel.add(new JSeparator(SwingConstants.HORIZONTAL));
 			return panel;
@@ -181,19 +146,6 @@ public class Diary extends ViewComponent {
 				ViewComponent.spawnInFrame(new AppointmentDetail(appointment), "Appointment");
 			});
 			panel.add(details);
-			return panel;
-		}
-	}
-
-	private class DiaryButtons extends ViewComponent {
-		@Override
-		public JPanel getPanel() {
-			JPanel panel = new JPanel();
-			JButton newAppointment = new JButton("Book a new appointment");
-			newAppointment.addActionListener(e -> {
-				ViewComponent.spawnInFrame(new NewAppointment(), "New appointment");
-			});
-			panel.add(newAppointment);
 			return panel;
 		}
 	}
