@@ -34,6 +34,17 @@ public class Diary extends ViewComponent {
 				thisMonday);
 	}
 
+	public static Diary partnerAuto(int partnerId) {
+		LocalDate thisMonday = LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+		LocalDate nextMonday = thisMonday.with(TemporalAdjusters.next(DayOfWeek.MONDAY));
+		return new Diary(
+				Appointment.getPartnerAppointments(
+						thisMonday.atStartOfDay(),
+						nextMonday.atStartOfDay(),
+						partnerId),
+				thisMonday);
+	}
+
 	public static Diary single() {
 		LocalDate thisDay = LocalDate.now();
 		LocalDate nextDay = thisDay.with(TemporalAdjusters.next(null));

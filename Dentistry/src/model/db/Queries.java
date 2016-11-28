@@ -34,6 +34,18 @@ public class Queries {
 		return results;
 	}
 
+	public static ResultSet getPartnerAppointments(LocalDateTime from, LocalDateTime to, int partnerId) throws SQLException {
+		String escapedFrom = from.format(DateTimeFormatter.ofPattern("YYYY-MM-dd HH:mm"));
+		String escapedTo = to.format(DateTimeFormatter.ofPattern("YYYY-MM-dd HH:mm"));
+		ResultSet results = Config.db.runQuery("SELECT * FROM appointment"
+				+ " LEFT OUTER JOIN patient ON appointment.patientId = patient.id"
+				+ " LEFT OUTER JOIN partner ON appointment.partnerId = partner.id"
+				+ " WHERE appointment.date > '" + escapedFrom + "'"
+				+ " AND appointment.date < '" + escapedTo + "'"
+				+ " AND appointment.partnerId = " + Integer.toString(partnerId) + ";");
+		return results;
+	}
+
 	public static ResultSet getAddress(int id) throws SQLException {
 		ResultSet results = Config.db.runQuery("SELECT * FROM address WHERE address.id = "
 				+ Integer.toString(id) + ";");

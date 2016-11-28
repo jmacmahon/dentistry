@@ -10,7 +10,8 @@ public class Secretary extends ViewComponent {
 		super();
 		this.tabs = new JTabbedPane();
 
-		this.tabs.addTab("Appointments", new JPanel());
+		this.tabs.addTab("Dentist appointments", new JPanel());
+		this.tabs.addTab("Hygienist appointments", new JPanel());
 		this.tabs.addTab("Patients", new JPanel());
 	}
 
@@ -24,7 +25,8 @@ public class Secretary extends ViewComponent {
 
 	@Override
 	public void refresh() {
-		this.tabs.setComponentAt(0, Diary.auto().getPanel());
-		this.tabs.setComponentAt(1, Patients.auto().getPanel());
+		this.tabs.setComponentAt(0, Diary.partnerAuto(1).getPanel());
+		this.tabs.setComponentAt(1, Diary.partnerAuto(2).getPanel());
+		this.tabs.setComponentAt(2, Patients.auto().getPanel());
 	}
 }

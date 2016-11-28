@@ -64,6 +64,25 @@ public class Appointment {
 		return this.getPatient().getSurname() + ", " + this.getPatient().getForename();
 	}
 
+	public static List<Appointment> getPartnerAppointments(LocalDateTime from, LocalDateTime to, int partnerId) {
+		if (Config.MOCK) {
+			return (List<Appointment>)(List<?>) mock.Appointment.getAppointments();
+		} else {
+			try {
+				ResultSet results = model.db.Queries.getPartnerAppointments(from, to, partnerId);
+				Vector<Appointment> appointments = new Vector<>();
+				while (results.next()) {
+					appointments.add(fromResultSet(results));
+				}
+				return appointments;
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return null;
+			}
+		}
+	}
+
 	@SuppressWarnings("unchecked")
 	public static List<Appointment> getAppointments(LocalDateTime from, LocalDateTime to) {
 		if (Config.MOCK) {
