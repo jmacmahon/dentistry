@@ -32,16 +32,7 @@ public class Diary extends ViewComponent {
 				thisMonday);
 	}
 
-	public static Diary single() {
-		LocalDate thisDay = LocalDate.now();
-		LocalDate nextDay = thisDay.with(TemporalAdjusters.next(null));
-		return new Diary(
-				Appointment.getAppointments(
-						thisDay.atStartOfDay(),
-						nextDay.atStartOfDay()),
-				thisDay);
-	}
-
+	
 	public Diary(Iterable<Appointment> appointments, LocalDate weekStartDate) {
 		super();
 		// We shouldn't need to do this but I'll leave it just in case
