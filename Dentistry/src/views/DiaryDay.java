@@ -18,7 +18,6 @@ import javax.swing.SwingConstants;
 
 import main.Config;
 import model.Appointment;
-import views.Diary.Day;
 
 public class DiaryDay extends ViewComponent {
 	private HashMap<DayOfWeek, Day> days;
@@ -36,7 +35,7 @@ public class DiaryDay extends ViewComponent {
 	}
 
 
-	
+
 	public DiaryDay(Iterable<Appointment> appointments, LocalDate weekStartDate) {
 		super();
 		// We shouldn't need to do this but I'll leave it just in case
@@ -53,7 +52,7 @@ public class DiaryDay extends ViewComponent {
 			this.days.put(dayOfWeek, day);
 		}
 
-		
+
 
 		// Sort the appointments into days
 		for (Appointment appointment : appointments) {
@@ -124,7 +123,7 @@ public class DiaryDay extends ViewComponent {
 					+ this.appointment.getEndTime().format(DateTimeFormatter.ofPattern("HH:mm"))
 					));
 			panel.add(new JLabel("Patient: " + this.appointment.getPatientName()));
-			panel.add(new JLabel("Partner: " + appointment.getPartnerName()));
+			panel.add(new JLabel("Partner: " + appointment.getPartner().toString()));
 			panel.add((new AppointmentButtons(this.appointment)).getPanel());
 			panel.add(new JSeparator(SwingConstants.HORIZONTAL));
 			return panel;

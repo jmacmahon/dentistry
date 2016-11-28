@@ -37,14 +37,14 @@ public class Login extends ViewComponent {
 		JPanel panel = new JPanel();
 		switch(getUser(panel)) {
 		case DENTIST:
-			//			Dentist dentist = new Dentist();
-			//			this.addChild(dentist);
-			//			panel.add(dentist.getPanel());
+			Dentist dentist = new Dentist();
+			this.addChild(dentist);
+			panel.add(dentist.getPanel());
 			break;
 		case HYGIENIST:
-			//			Hygienist hygienist = new Hygienist();
-			//			this.addChild(hygienist);
-			//			panel.add(hygienist.getPanel());
+			Hygienist hygienist = new Hygienist();
+			this.addChild(hygienist);
+			panel.add(hygienist.getPanel());
 			break;
 		case SECRETARY:
 			Secretary secretary = new Secretary();

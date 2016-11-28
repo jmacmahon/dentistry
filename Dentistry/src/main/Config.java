@@ -41,14 +41,4 @@ public final class Config {
 	public static final String DB_PROPERTIES = "";
 
 	public static final String DB_CREATE = "CREATE DATABASE " + Config.DB_NAME;
-
-	public static final String DB_CREATE_APPOINTMENTS =
-			"CREATE TABLE appointments " +
-					"(id INTEGER  NOT NULL AUTO_INCREMENT, " +
-					" patientName VARCHAR(255), " +
-					" partnerName VARCHAR(255), " +
-					" startTime datetime, " +
-					" duration INTEGER, " +
-					" treatments VARCHAR(255), " +
-					" PRIMARY KEY ( id ))";
 }
