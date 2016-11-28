@@ -12,9 +12,11 @@ import main.Config;
 public class Patient {
 	private int id;
 	private CachedPatient cached;
+	private HealthcarePlan plan;
 
 	public Patient(int id) {
 		this.id = id;
+		this.plan = new HealthcarePlan(id);
 	}
 
 	private CachedPatient getCached() {
@@ -59,6 +61,9 @@ public class Patient {
 	}
 	public Address getAddress() {
 		return this.getCached().getAddress();
+	}
+	public HealthcarePlan getPlan() {
+		return this.plan;
 	}
 
 	public static List<Patient> getAllPatients() {
@@ -115,6 +120,19 @@ public class Patient {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
+		}
+	}
+
+	public static int add(String title, String forename, String surname,
+			String contact, LocalDate dateOfBirth, int addressId) {
+		try {
+			ResultSet result = model.db.Queries.addPatient(title, forename, surname, contact, dateOfBirth, addressId);
+			result.next();
+			return result.getInt("id");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return -1;
 		}
 	}
 }

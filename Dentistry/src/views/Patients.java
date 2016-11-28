@@ -7,6 +7,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
 
@@ -36,7 +37,11 @@ public class Patients extends ViewComponent {
 		this.patientList = new JPanel();
 		this.patientList.setLayout(new BoxLayout(this.patientList, BoxLayout.PAGE_AXIS));
 		refreshPatientList(this.patients);
-		panel.add(this.patientList);
+
+		JScrollPane patientListScroll = new JScrollPane(this.patientList);
+		patientListScroll.setPreferredSize(this.patientList.getPreferredSize());
+
+		panel.add(patientListScroll);
 		return panel;
 	}
 

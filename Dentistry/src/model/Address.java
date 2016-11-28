@@ -65,4 +65,16 @@ public class Address {
 			return new Address(id);
 		}
 	}
+
+	public static int add(int houseNumber, String streetName, String districtName, String cityName, String postcode) {
+		try {
+			ResultSet result = model.db.Queries.addAddress(houseNumber, streetName, districtName, cityName, postcode);
+			result.next();
+			return result.getInt("id");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return -1;
+		}
+	}
 }

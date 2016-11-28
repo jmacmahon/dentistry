@@ -55,6 +55,9 @@ public class PatientDetail extends ViewComponent {
 		buttons.setLayout(new BoxLayout(buttons, BoxLayout.PAGE_AXIS));
 
 		JButton healthcarePlan = new JButton("Healthcare plan details");
+		healthcarePlan.addActionListener(e -> {
+			ViewComponent.spawnInFrame(new HealthcarePlanDetail(patient), "Healthcare Plan");
+		});
 		buttons.add(healthcarePlan);
 
 		return buttons;

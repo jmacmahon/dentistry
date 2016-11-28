@@ -1,8 +1,10 @@
 package model.db;
 
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -100,5 +102,41 @@ public class Queries {
 			statement.setString(postcodeIndex, postcode);
 		}
 		return statement.executeQuery();
+	}
+
+	public static ResultSet getPlanForPatient(int patientId) throws SQLException {
+		return Config.db.runQuery("SELECT * FROM patientPlan"
+				+ " LEFT OUTER JOIN patient ON patientPlan.patientId = patient.id"
+				+ " LEFT OUTER JOIN plan ON patientPlan.planId = plan.id"
+				+ " WHERE patientPlan.patientId = " + Integer.toString(patientId) + ";");
+	}
+
+	public static ResultSet addAddress(int houseNumber, String streetName,
+			String districtName, String cityName, String postcode) throws SQLException {
+		String query = "INSERT INTO address (houseNumber, streetName,"
+				+ " districtName, cityName, postCode) VALUES ( (?), (?), (?), (?), (?) );";
+		PreparedStatement statement = Config.db.getPreparedStatement(query);
+		statement.setInt(1, houseNumber);
+		statement.setString(2, streetName);
+		statement.setString(3, districtName);
+		statement.setString(4, cityName);
+		statement.setString(5, postcode);
+		statement.executeUpdate();
+		return Config.db.runQuery("SELECT id FROM address ORDER BY id DESC LIMIT 1;");
+	}
+
+	public static ResultSet addPatient(String title, String forename, String surname,
+			String contact, LocalDate dateOfBirth, int addressId) throws SQLException {
+		String query = "INSERT INTO patient (title, forename, surname, contactNumber,"
+				+ " dateOfBirth, addressId) VALUES ( (?), (?), (?), (?), (?), (?) );";
+		PreparedStatement statement = Config.db.getPreparedStatement(query);
+		statement.setString(1, title);
+		statement.setString(2, forename);
+		statement.setString(3, surname);
+		statement.setString(4, contact);
+		statement.setDate(5, Date.valueOf(dateOfBirth));
+		statement.setInt(6, addressId);
+		statement.executeUpdate();
+		return Config.db.runQuery("SELECT id FROM patient ORDER BY id DESC LIMIT 1;");
 	}
 }

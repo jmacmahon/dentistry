@@ -67,4 +67,16 @@ public abstract class ViewComponent {
 			}
 		}
 	}
+
+	public static void closeNewPatient() {
+		Vector<JFrame> toClose = new Vector<>();
+		for (Entry<ViewComponent, JFrame> entry : activeFrames.entrySet()) {
+			if (entry.getKey() instanceof NewPatient) {
+				toClose.add(entry.getValue());
+			}
+		}
+		for (JFrame frame : toClose) {
+			frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
+		}
+	}
 }

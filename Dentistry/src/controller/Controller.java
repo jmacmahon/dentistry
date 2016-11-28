@@ -1,11 +1,11 @@
 package controller;
 
-import java.util.List;
-import java.util.Vector;
+import java.time.LocalDate;
 
 import javax.swing.JFrame;
 
 import main.Config;
+import model.Address;
 import model.Appointment;
 import model.Patient;
 import model.db.Database;
@@ -14,15 +14,6 @@ import views.ViewComponent;
 
 public class Controller {
 	private static Database db;
-
-	// Static class for the moment until we need objects.  To be refactored later.
-	public static List<Patient> getPatients() {
-		Vector<Patient> patients = new Vector<Patient>();
-		for (Patient patient : mock.Patient.MOCK_DATA) {
-			patients.add(patient);
-		}
-		return patients;
-	}
 
 	public static void initDB() {
 		Config.db = new Database(Config.DB_URL, Config.DB_USER, Config.DB_PASS);
@@ -37,6 +28,16 @@ public class Controller {
 	public static void deleteAppointment(Appointment appointment) {
 		Appointment.delete(appointment);
 		ViewComponent.closeAppointment(appointment);
+		ViewComponent.refreshAll();
+	}
+
+	public static void newPatient(String title, String forename, String surname,
+			String contact, LocalDate dateOfBirth, int houseNumber,
+			String streetName, String districtName, String cityName,
+			String postcode) {
+		int addressId = Address.add(houseNumber, streetName, districtName, cityName, postcode);
+		Patient.add(title, forename, surname, contact, dateOfBirth, addressId);
+		ViewComponent.closeNewPatient();
 		ViewComponent.refreshAll();
 	}
 }
