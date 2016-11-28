@@ -1,12 +1,14 @@
 package controller;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 import javax.swing.JFrame;
 
 import main.Config;
 import model.Address;
 import model.Appointment;
+import model.Partner;
 import model.Patient;
 import model.db.Database;
 import views.Login;
@@ -38,6 +40,13 @@ public class Controller {
 		int addressId = Address.add(houseNumber, streetName, districtName, cityName, postcode);
 		Patient.add(title, forename, surname, contact, dateOfBirth, addressId);
 		ViewComponent.closeNewPatient();
+		ViewComponent.refreshAll();
+	}
+
+	public static void newAppointment(Patient patient, Partner partner, LocalDate date, LocalTime time,
+			Integer duration) {
+		Appointment.add(patient.getId(), partner.getId(), date.atTime(time), duration.intValue());
+		ViewComponent.closeNewAppointment();
 		ViewComponent.refreshAll();
 	}
 }

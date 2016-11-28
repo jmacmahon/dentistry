@@ -38,7 +38,7 @@ public class AppointmentDetail extends ViewComponent {
 		JPanel partnerDetails = new JPanel();
 		partnerDetails.setLayout(new GridLayout(0, 2));
 		partnerDetails.add(new JLabel("Partner"));
-		partnerDetails.add(new JLabel(this.appointment.getPartnerName()));
+		partnerDetails.add(new JLabel(this.appointment.getPartner().toString()));
 
 		return partnerDetails;
 	}

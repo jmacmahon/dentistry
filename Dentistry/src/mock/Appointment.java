@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 
+import model.Partner;
 import model.Patient;
 import model.Treatment;
 
@@ -45,6 +46,6 @@ public class Appointment extends model.Appointment {
 	}
 
 	public Appointment(int id, LocalDateTime startTime, int duration, Patient patient, String partnerName) {
-		super(id, startTime, duration, patient, partnerName);
+		super(id, startTime, duration, patient, new Partner(0, "A", partnerName, "Mx"));
 	}
 }

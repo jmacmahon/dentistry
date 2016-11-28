@@ -65,6 +65,10 @@ public class Patient {
 	public HealthcarePlan getPlan() {
 		return this.plan;
 	}
+	@Override
+	public String toString() {
+		return this.getTitle() + " " + this.getSurname() + ", " + this.getForename();
+	}
 
 	public static List<Patient> getAllPatients() {
 		ResultSet results;

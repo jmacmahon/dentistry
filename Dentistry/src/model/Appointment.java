@@ -12,15 +12,15 @@ public class Appointment {
 	private LocalDateTime startTime;
 	private int duration;
 	private Patient patient;
-	private String partnerName;
+	private Partner partner;
 	private int id;
 
-	public Appointment(int id, LocalDateTime startTime, int duration, Patient patient, String partnerName) {
+	public Appointment(int id, LocalDateTime startTime, int duration, Patient patient, Partner partner) {
 		super();
 		this.startTime = startTime;
 		this.duration = duration;
 		this.patient = patient;
-		this.partnerName = partnerName;
+		this.partner = partner;
 		this.id = id;
 	}
 	public LocalDateTime getStartTime() {
@@ -32,8 +32,8 @@ public class Appointment {
 	public Patient getPatient() {
 		return patient;
 	}
-	public String getPartnerName() {
-		return partnerName;
+	public Partner getPartner() {
+		return partner;
 	}
 	public int getId() {
 		return id;
@@ -85,8 +85,11 @@ public class Appointment {
 	}
 
 	public static void delete(Appointment appointment) {
-		// TODO
-		mock.Appointment.deleted.add((mock.Appointment) appointment);
+		if (Config.MOCK) {
+			mock.Appointment.deleted.add((mock.Appointment) appointment);
+		} else {
+			// TODO
+		}
 	}
 
 	public static Appointment fromResultSet(ResultSet result) {
@@ -96,11 +99,23 @@ public class Appointment {
 					result.getTimestamp("appointment.date").toLocalDateTime(),
 					result.getInt("appointment.duration"),
 					Patient.fromResultSet(result, result.getInt("appointment.patientId")),
-					result.getString("partner.surname"));
+					Partner.fromResultSet(result));
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
+		}
+	}
+
+	public static int add(int patientId, int partnerId, LocalDateTime date, int duration) {
+		try {
+			ResultSet result = model.db.Queries.addAppointment(patientId, partnerId, date, duration);
+			result.next();
+			return result.getInt("id");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return -1;
 		}
 	}
 }

@@ -18,6 +18,11 @@ public class Queries {
 		return results;
 	}
 
+	public static ResultSet getAllPartners() throws SQLException {
+		ResultSet results = Config.db.runQuery("SELECT * FROM partner;");
+		return results;
+	}
+
 	public static ResultSet getAppointments(LocalDateTime from, LocalDateTime to) throws SQLException {
 		String escapedFrom = from.format(DateTimeFormatter.ofPattern("YYYY-MM-dd HH:mm"));
 		String escapedTo = to.format(DateTimeFormatter.ofPattern("YYYY-MM-dd HH:mm"));
@@ -138,5 +143,15 @@ public class Queries {
 		statement.setInt(6, addressId);
 		statement.executeUpdate();
 		return Config.db.runQuery("SELECT id FROM patient ORDER BY id DESC LIMIT 1;");
+	}
+
+	public static ResultSet addAppointment(int patientId, int partnerId, LocalDateTime date, int duration) throws SQLException {
+		String query = "INSERT INTO appointment (patientId, partnerId, date, duration) VALUES"
+				+ " (" + Integer.toString(patientId)
+				+ ", " + Integer.toString(partnerId)
+				+ ", '" + date.format(DateTimeFormatter.ofPattern("YYYY-MM-dd HH:mm")) + "'"
+				+ ", " + Integer.toString(duration) + ");";
+		Config.db.runQuery(query);
+		return Config.db.runQuery("SELECT id FROM appointment ORDER BY id DESC LIMIT 1;");
 	}
 }

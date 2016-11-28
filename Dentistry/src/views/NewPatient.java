@@ -1,12 +1,8 @@
 package views;
 
 import java.awt.GridLayout;
-import java.time.LocalDate;
-import java.util.stream.IntStream;
 
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -79,48 +75,5 @@ public class NewPatient extends ViewComponent {
 		panel.add(save);
 
 		return panel;
-	}
-
-	private static class DateField extends ViewComponent {
-		private static final Integer[] DAYS = IntStream.rangeClosed(1, 31).boxed().toArray(Integer[]::new);
-		private static final String[] MONTHS = {"January", "February",
-				"March", "April", "May", "June", "July", "August",
-				"September", "October", "November", "December"};
-		private static final Integer[] YEARS = IntStream.rangeClosed(1900, 2016).boxed().toArray(Integer[]::new);
-
-		private JComboBox<Integer> day;
-		private JComboBox<String> month;
-		private JComboBox<Integer> year;
-
-		@Override
-		public JPanel getPanel() {
-			JPanel panel = new JPanel();
-			panel.setLayout(new BoxLayout(panel, BoxLayout.LINE_AXIS));
-
-			this.day = new JComboBox<>(DAYS);
-			this.month = new JComboBox<>(MONTHS);
-			this.year = new JComboBox<>(YEARS);
-
-			panel.add(day);
-			panel.add(month);
-			panel.add(year);
-			return panel;
-		}
-
-		public int getDay() {
-			return ((Integer)this.day.getSelectedItem()).intValue();
-		}
-
-		public int getMonth() {
-			return this.month.getSelectedIndex() + 1;
-		}
-
-		public int getYear() {
-			return ((Integer)this.year.getSelectedItem()).intValue();
-		}
-
-		public LocalDate getDate() {
-			return LocalDate.of(this.getYear(), this.getMonth(), this.getDay());
-		}
 	}
 }
