@@ -7,9 +7,11 @@ import java.util.Vector;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import controller.Controller;
+import controller.DataException;
 import model.Partner;
 import model.Patient;
 
@@ -49,8 +51,12 @@ public class NewAppointment extends ViewComponent {
 
 		JButton book = new JButton("Book appointment");
 		book.addActionListener(e -> {
-			Controller.newAppointment((Patient)patientBox.getSelectedItem(), (Partner)partnerBox.getSelectedItem(),
-					date.getDate(), time.getTime(), (Integer)durationBox.getSelectedItem());
+			try {
+				Controller.newAppointment((Patient)patientBox.getSelectedItem(), (Partner)partnerBox.getSelectedItem(),
+						date.getDate(), time.getTime(), (Integer)durationBox.getSelectedItem());
+			} catch (DataException exc) {
+				JOptionPane.showMessageDialog(book, exc.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+			}
 		});
 		panel.add(book);
 

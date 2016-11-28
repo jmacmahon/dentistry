@@ -40,8 +40,8 @@ public class Queries {
 		ResultSet results = Config.db.runQuery("SELECT * FROM appointment"
 				+ " LEFT OUTER JOIN patient ON appointment.patientId = patient.id"
 				+ " LEFT OUTER JOIN partner ON appointment.partnerId = partner.id"
-				+ " WHERE appointment.date > '" + escapedFrom + "'"
-				+ " AND appointment.date < '" + escapedTo + "'"
+				+ " WHERE appointment.date >= '" + escapedFrom + "'"
+				+ " AND appointment.date <= '" + escapedTo + "'"
 				+ " AND appointment.partnerId = " + Integer.toString(partnerId) + ";");
 		return results;
 	}

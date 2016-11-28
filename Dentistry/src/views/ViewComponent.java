@@ -57,14 +57,17 @@ public abstract class ViewComponent {
 	}
 
 	public static void closeAppointment(Appointment appointment) {
+		Vector<JFrame> toClose = new Vector<>();
 		for (Entry<ViewComponent, JFrame> entry : activeFrames.entrySet()) {
 			if (entry.getKey() instanceof AppointmentDetail) {
 				AppointmentDetail detail = (AppointmentDetail)entry.getKey();
 				if (detail.getAppointment() == appointment) {
-					JFrame frame = entry.getValue();
-					frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
+					toClose.add(entry.getValue());
 				}
 			}
+		}
+		for (JFrame frame : toClose) {
+			frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
 		}
 	}
 

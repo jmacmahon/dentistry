@@ -1,7 +1,9 @@
 package controller;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 
 import javax.swing.JFrame;
 
@@ -44,8 +46,30 @@ public class Controller {
 	}
 
 	public static void newAppointment(Patient patient, Partner partner, LocalDate date, LocalTime time,
-			Integer duration) {
-		Appointment.add(patient.getId(), partner.getId(), date.atTime(time), duration.intValue());
+			Integer duration) throws DataException {
+		LocalDateTime startTime = date.atTime(time);
+		LocalDateTime endTime = startTime.plusMinutes(duration);
+		// Check this doesn't clash with patient's appts
+		List<Appointment> possibleClashes = Appointment.getAppointments(
+				startTime.minusHours(2), endTime);
+		for (Appointment possibleClash : possibleClashes) {
+			if (possibleClash.getPatient().getId() == patient.getId()
+					&& possibleClash.getStartTime().isBefore(endTime)
+					&& possibleClash.getEndTime().isAfter(startTime)) {
+				throw new DataException("This appointment clashes with another appointment of the same patient");
+			}
+		}
+		// Check this doesn't clash with the partner's appts
+		possibleClashes = Appointment.getAppointments(
+				startTime.minusHours(2), endTime);
+		for (Appointment possibleClash : possibleClashes) {
+			if (possibleClash.getPartner().getId() == partner.getId()
+					&& possibleClash.getStartTime().isBefore(endTime)
+					&& possibleClash.getEndTime().isAfter(startTime)) {
+				throw new DataException("This appointment clashes with another appointment with the same partner");
+			}
+		}
+		Appointment.add(patient.getId(), partner.getId(), startTime, duration.intValue());
 		ViewComponent.closeNewAppointment();
 		ViewComponent.refreshAll();
 	}
