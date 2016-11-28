@@ -46,9 +46,18 @@ public class Treatment {
 	}
 
 	public static enum TreatmentType {
-		HYGIENE_VISIT,
-		CHECK_UP,
-		REPAIR_WORK,
+		HYGIENE_VISIT("Hygiene visit"),
+		CHECK_UP("Check up"),
+		REPAIR_WORK("Repair work");
+
+		private final String userReadable;
+		private TreatmentType(String userReadable) {
+			this.userReadable = userReadable;
+		}
+		@Override
+		public String toString() {
+			return userReadable;
+		}
 	}
 
 	private static TreatmentType parseType(String typeStr) {
