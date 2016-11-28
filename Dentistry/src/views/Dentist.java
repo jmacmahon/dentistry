@@ -23,6 +23,6 @@ public class Dentist extends ViewComponent {
 
 	@Override
 	public void refresh() {
-		this.tabs.setComponentAt(0, Diary.single().getPanel());
+		this.tabs.setComponentAt(0, Diary.auto().getPanel());
 	}
 }
