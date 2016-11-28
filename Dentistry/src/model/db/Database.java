@@ -73,9 +73,6 @@ public class Database {
 		statement = connection.createStatement();
 		System.out.println("Connected to new database...");
 
-		statement.executeUpdate(Config.DB_CREATE_APPOINTMENTS);
-		System.out.println("Added appointments table...");
-
 		if (statement != null) {
 			statement.close();
 		}
