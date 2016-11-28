@@ -1,8 +1,8 @@
 package mock;
 
-public class Treatment extends model.Treatment {
+public class Treatment extends model.CachedTreatment {
 	public Treatment(int cost, String name, TreatmentType type) {
-		super(name, type, cost);
+		super(0, name, type, cost);
 	}
 
 	public static final Treatment[] MOCK_DATA = {

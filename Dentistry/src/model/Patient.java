@@ -1,49 +1,142 @@
 package model;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
 
-public abstract class Patient {
-	private String forename;
-	private String surname;
-	private String title;
-	private String contactNumber;
-	private LocalDate dateOfBirth;
-	private Address address;
+import main.Config;
 
-	public Patient(String forename, String surname, String title, String contactNumber, LocalDate dateOfBirth,
-			Address address) {
-		super();
-		this.forename = forename;
-		this.surname = surname;
-		this.title = title;
-		this.contactNumber = contactNumber;
-		this.dateOfBirth = dateOfBirth;
-		this.address = address;
+public class Patient {
+	private int id;
+	private CachedPatient cached;
+	private HealthcarePlan plan;
+
+	public Patient(int id) {
+		this.id = id;
+		this.plan = new HealthcarePlan(id);
 	}
 
+	private CachedPatient getCached() {
+		if (this.cached == null) {
+			try {
+				ResultSet results = model.db.Queries.getPatient(this.id);
+				results.next();
+				Patient shouldBeCached = Patient.fromResultSet(results, this.id);
+				if (shouldBeCached instanceof CachedPatient) {
+					this.cached = (CachedPatient) shouldBeCached;
+				} else {
+					// something went wrong -- throw an exception
+					// TODO make this a non-runtime exception
+					throw new RuntimeException();
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return null;
+			}
+		}
+		return this.cached;
+	}
+
+	public int getId() {
+		return this.id;
+	}
 	public String getForename() {
-		return forename;
+		return this.getCached().getForename();
 	}
 	public String getSurname() {
-		return surname;
+		return this.getCached().getSurname();
 	}
 	public String getTitle() {
-		return title;
+		return this.getCached().getTitle();
 	}
 	public String getContactNumber() {
-		return contactNumber;
+		return this.getCached().getContactNumber();
 	}
 	public LocalDate getDateOfBirth() {
-		return dateOfBirth;
+		return this.getCached().getDateOfBirth();
 	}
 	public Address getAddress() {
-		return address;
+		return this.getCached().getAddress();
+	}
+	public HealthcarePlan getPlan() {
+		return this.plan;
+	}
+	@Override
+	public String toString() {
+		return this.getTitle() + " " + this.getSurname() + ", " + this.getForename();
 	}
 
 	public static List<Patient> getAllPatients() {
-		return new Vector<Patient>(Arrays.asList(mock.Patient.MOCK_DATA));
+		ResultSet results;
+		try {
+			results = model.db.Queries.getAllPatients();
+			return allFromResultSet(results);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public static List<Patient> allFromResultSet(ResultSet results) {
+		if (Config.MOCK) {
+			return new Vector<Patient>(Arrays.asList(mock.Patient.MOCK_DATA));
+		} else {
+			Vector<Patient> patients = new Vector<>();
+			try {
+				while (results.next()) {
+					patients.add(fromResultSet(results, results.getInt("patient.id")));
+				}
+				return patients;
+			} catch (SQLException e) {
+				// TODO maybe throw a ModelError here?
+				e.printStackTrace();
+				return null;
+			}
+		}
+	}
+
+	public static Patient fromResultSet(ResultSet results, int id) {
+		try {
+			return new CachedPatient(
+					results.getInt("patient.id"),
+					results.getString("patient.forename"),
+					results.getString("patient.surname"),
+					results.getString("patient.title"),
+					results.getString("patient.contactNumber"),
+					results.getDate("patient.dateOfBirth").toLocalDate(),
+					Address.fromResultSet(results, results.getInt("patient.addressId")));
+		} catch (SQLException e) {
+			return new Patient(id);
+		}
+	}
+
+	public static List<Patient> search(String forename, String surname, Integer houseNumber, String postcode) {
+		ResultSet results;
+		try {
+			results = model.db.Queries.searchPatients(forename, surname, houseNumber, postcode);
+			return allFromResultSet(results);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public static int add(String title, String forename, String surname,
+			String contact, LocalDate dateOfBirth, int addressId) {
+		try {
+			ResultSet result = model.db.Queries.addPatient(title, forename, surname, contact, dateOfBirth, addressId);
+			result.next();
+			return result.getInt("id");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return -1;
+		}
 	}
 }

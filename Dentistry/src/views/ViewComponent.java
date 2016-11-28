@@ -51,20 +51,60 @@ public abstract class ViewComponent {
 	}
 
 	public static void refreshAll() {
-		for (ViewComponent component : activeFrames.keySet()) {
-			component.refresh();
+		for (Entry<ViewComponent, JFrame> entry : activeFrames.entrySet()) {
+			entry.getKey().refresh();
+			entry.getValue().pack();
 		}
 	}
 
 	public static void closeAppointment(Appointment appointment) {
+		Vector<JFrame> toClose = new Vector<>();
 		for (Entry<ViewComponent, JFrame> entry : activeFrames.entrySet()) {
 			if (entry.getKey() instanceof AppointmentDetail) {
 				AppointmentDetail detail = (AppointmentDetail)entry.getKey();
 				if (detail.getAppointment() == appointment) {
-					JFrame frame = entry.getValue();
-					frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
+					toClose.add(entry.getValue());
 				}
 			}
+		}
+		for (JFrame frame : toClose) {
+			frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
+		}
+	}
+
+	public static void closeNewPatient() {
+		Vector<JFrame> toClose = new Vector<>();
+		for (Entry<ViewComponent, JFrame> entry : activeFrames.entrySet()) {
+			if (entry.getKey() instanceof NewPatient) {
+				toClose.add(entry.getValue());
+			}
+		}
+		for (JFrame frame : toClose) {
+			frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
+		}
+	}
+
+	public static void closeNewAppointment() {
+		Vector<JFrame> toClose = new Vector<>();
+		for (Entry<ViewComponent, JFrame> entry : activeFrames.entrySet()) {
+			if (entry.getKey() instanceof NewAppointment) {
+				toClose.add(entry.getValue());
+			}
+		}
+		for (JFrame frame : toClose) {
+			frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
+		}
+	}
+
+	public static void closeNewPlan() {
+		Vector<JFrame> toClose = new Vector<>();
+		for (Entry<ViewComponent, JFrame> entry : activeFrames.entrySet()) {
+			if (entry.getKey() instanceof NewPlan) {
+				toClose.add(entry.getValue());
+			}
+		}
+		for (JFrame frame : toClose) {
+			frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
 		}
 	}
 }

@@ -1,6 +1,8 @@
 package views;
 
+import java.awt.Color;
 import java.time.DayOfWeek;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -32,7 +34,31 @@ public class Diary extends ViewComponent {
 				thisMonday);
 	}
 
+<<<<<<< HEAD
 	
+=======
+	public static Diary partnerAuto(int partnerId) {
+		LocalDate thisMonday = LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+		LocalDate nextMonday = thisMonday.with(TemporalAdjusters.next(DayOfWeek.MONDAY));
+		return new Diary(
+				Appointment.getPartnerAppointments(
+						thisMonday.atStartOfDay(),
+						nextMonday.atStartOfDay(),
+						partnerId),
+				thisMonday);
+	}
+
+	public static Diary single() {
+		LocalDate thisDay = LocalDate.now();
+		LocalDate nextDay = thisDay.with(TemporalAdjusters.next(null));
+		return new Diary(
+				Appointment.getAppointments(
+						thisDay.atStartOfDay(),
+						nextDay.atStartOfDay()),
+				thisDay);
+	}
+
+>>>>>>> e7eab614575225ce4f2ac15163a3462be9134c61
 	public Diary(Iterable<Appointment> appointments, LocalDate weekStartDate) {
 		super();
 		// We shouldn't need to do this but I'll leave it just in case
@@ -65,11 +91,17 @@ public class Diary extends ViewComponent {
 
 	@Override
 	public JPanel getPanel() {
-		JPanel panel = new JPanel();
-		panel.setLayout(new BoxLayout(panel, BoxLayout.LINE_AXIS));
+		JPanel buttonsPanel = (new DiaryButtons()).getPanel();
+		JPanel dayPanel = new JPanel();
+		dayPanel.setLayout(new BoxLayout(dayPanel, BoxLayout.LINE_AXIS));
 		for (DayOfWeek dayOfWeek : Config.WORKING_WEEK_DAYS) {
-			panel.add(this.days.get(dayOfWeek).getPanel());
+			dayPanel.add(this.days.get(dayOfWeek).getPanel());
 		}
+
+		JPanel panel = new JPanel();
+		panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
+		panel.add(buttonsPanel);
+		panel.add(dayPanel);
 		return panel;
 	}
 
@@ -93,9 +125,22 @@ public class Diary extends ViewComponent {
 			panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
 			panel.add(new JLabel(this.date.format(DateTimeFormatter.ofPattern("EEEE"))));
 			panel.add(new JLabel(this.date.format(DateTimeFormatter.ofPattern("dd MMM yyyy"))));
-			panel.add(new JSeparator(SwingConstants.HORIZONTAL));
+			panel.add(new JSeparator(JSeparator.HORIZONTAL));
+			Appointment previous = null;
 			for (Appointment appointment : appointments) {
+				if (previous != null) {
+					Duration diff = Duration.between(previous.getEndTime(), appointment.getStartTime());
+					if (diff.toMinutes() >= 5) {
+						JLabel gap = new JLabel("Gap of " + diff.toMinutes() + " minutes");
+						gap.setBackground(Color.PINK);
+						gap.setOpaque(true);
+						panel.add(gap);
+						panel.add(new JPanel());
+						panel.add(new JSeparator(JSeparator.HORIZONTAL));
+					}
+				}
 				panel.add((new AppointmentComponent(appointment)).getPanel());
+				previous = appointment;
 			}
 			return panel;
 		}
@@ -118,7 +163,7 @@ public class Diary extends ViewComponent {
 					+ this.appointment.getEndTime().format(DateTimeFormatter.ofPattern("HH:mm"))
 					));
 			panel.add(new JLabel("Patient: " + this.appointment.getPatientName()));
-			panel.add(new JLabel("Partner: " + appointment.getPartnerName()));
+			panel.add(new JLabel("Partner: " + appointment.getPartner().toString()));
 			panel.add((new AppointmentButtons(this.appointment)).getPanel());
 			panel.add(new JSeparator(SwingConstants.HORIZONTAL));
 			return panel;
@@ -140,6 +185,19 @@ public class Diary extends ViewComponent {
 				ViewComponent.spawnInFrame(new AppointmentDetail(appointment), "Appointment");
 			});
 			panel.add(details);
+			return panel;
+		}
+	}
+
+	private class DiaryButtons extends ViewComponent {
+		@Override
+		public JPanel getPanel() {
+			JPanel panel = new JPanel();
+			JButton newAppointment = new JButton("Book a new appointment");
+			newAppointment.addActionListener(e -> {
+				ViewComponent.spawnInFrame(new NewAppointment(), "New appointment");
+			});
+			panel.add(newAppointment);
 			return panel;
 		}
 	}

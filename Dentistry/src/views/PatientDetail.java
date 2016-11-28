@@ -26,7 +26,7 @@ public class PatientDetail extends ViewComponent {
 		leftPanel.add(new JLabel(this.patient.getTitle()));
 
 		leftPanel.add(new JLabel("Name:"));
-		leftPanel.add(new JLabel(this.patient.getSurname() + ", " + this.patient.getForename()));
+		leftPanel.add(new JLabel(this.patient.toString()));
 
 		leftPanel.add(new JLabel("DOB:"));
 		leftPanel.add(new JLabel(this.patient.getDateOfBirth().format(DateTimeFormatter.ofPattern("YYYY-MM-dd"))));
@@ -55,6 +55,9 @@ public class PatientDetail extends ViewComponent {
 		buttons.setLayout(new BoxLayout(buttons, BoxLayout.PAGE_AXIS));
 
 		JButton healthcarePlan = new JButton("Healthcare plan details");
+		healthcarePlan.addActionListener(e -> {
+			ViewComponent.spawnInFrame(new HealthcarePlanDetail(patient), "Healthcare Plan");
+		});
 		buttons.add(healthcarePlan);
 
 		return buttons;

@@ -1,12 +1,17 @@
 package controller;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
-import java.util.Vector;
 
 import javax.swing.JFrame;
 
 import main.Config;
+import model.Address;
 import model.Appointment;
+import model.HealthcarePlanType;
+import model.Partner;
 import model.Patient;
 import model.db.Database;
 import views.Login;
@@ -15,18 +20,9 @@ import views.ViewComponent;
 public class Controller {
 	private static Database db;
 
-	// Static class for the moment until we need objects.  To be refactored later.
-	public static List<Patient> getPatients() {
-		Vector<Patient> patients = new Vector<Patient>();
-		for (Patient patient : mock.Patient.MOCK_DATA) {
-			patients.add(patient);
-		}
-		return patients;
-	}
-
 	public static void initDB() {
-		db = new Database(Config.DB_URL, Config.DB_USER, Config.DB_PASS);
-		db.init();
+		Config.db = new Database(Config.DB_URL, Config.DB_USER, Config.DB_PASS);
+		Config.db.init();
 	}
 
 	public static void entryPoint() {
@@ -40,9 +36,48 @@ public class Controller {
 		ViewComponent.refreshAll();
 	}
 
-	public static List<Patient> searchPatients(Integer houseNumber, String postcode) {
-		Vector<Patient> patients = new Vector<>();
-		patients.add(mock.Patient.MOCK_DATA[0]);
-		return patients;
+	public static void newPatient(String title, String forename, String surname,
+			String contact, LocalDate dateOfBirth, int houseNumber,
+			String streetName, String districtName, String cityName,
+			String postcode) {
+		int addressId = Address.add(houseNumber, streetName, districtName, cityName, postcode);
+		Patient.add(title, forename, surname, contact, dateOfBirth, addressId);
+		ViewComponent.closeNewPatient();
+		ViewComponent.refreshAll();
+	}
+
+	public static void newAppointment(Patient patient, Partner partner, LocalDate date, LocalTime time,
+			Integer duration) throws DataException {
+		LocalDateTime startTime = date.atTime(time);
+		LocalDateTime endTime = startTime.plusMinutes(duration);
+		// Check this doesn't clash with patient's appts
+		List<Appointment> possibleClashes = Appointment.getAppointments(
+				startTime.minusHours(2), endTime);
+		for (Appointment possibleClash : possibleClashes) {
+			if (possibleClash.getPatient().getId() == patient.getId()
+					&& possibleClash.getStartTime().isBefore(endTime)
+					&& possibleClash.getEndTime().isAfter(startTime)) {
+				throw new DataException("This appointment clashes with another appointment of the same patient");
+			}
+		}
+		// Check this doesn't clash with the partner's appts
+		possibleClashes = Appointment.getAppointments(
+				startTime.minusHours(2), endTime);
+		for (Appointment possibleClash : possibleClashes) {
+			if (possibleClash.getPartner().getId() == partner.getId()
+					&& possibleClash.getStartTime().isBefore(endTime)
+					&& possibleClash.getEndTime().isAfter(startTime)) {
+				throw new DataException("This appointment clashes with another appointment with the same partner");
+			}
+		}
+		Appointment.add(patient.getId(), partner.getId(), startTime, duration.intValue());
+		ViewComponent.closeNewAppointment();
+		ViewComponent.refreshAll();
+	}
+
+	public static void addPlan(Patient patient, HealthcarePlanType plan) {
+		HealthcarePlanType.add(patient.getId(), plan.getId());
+		ViewComponent.closeNewPlan();
+		ViewComponent.refreshAll();
 	}
 }

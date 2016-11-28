@@ -1,34 +1,80 @@
 package model;
 
-public class Address {
-	private int houseNumber;
-	private String streetName;
-	private String districtName;
-	private String cityName;
-	private String postcode;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
-	public Address(int houseNumber, String streetName, String districtName, String cityName, String postcode) {
-		super();
-		this.houseNumber = houseNumber;
-		this.streetName = streetName;
-		this.districtName = districtName;
-		this.cityName = cityName;
-		this.postcode = postcode;
+public class Address {
+	private int id;
+	private CachedAddress cached;
+
+	public Address(int id) {
+		this.id = id;
 	}
 
+	private CachedAddress getCachedAddress() {
+		if (this.cached == null) {
+			try {
+				ResultSet results = model.db.Queries.getAddress(this.id);
+				results.next();
+				Address shouldBeCached = Address.fromResultSet(results, this.id);
+				if (shouldBeCached instanceof CachedAddress) {
+					this.cached = (CachedAddress) shouldBeCached;
+				} else {
+					// something went wrong -- throw an exception
+					// TODO make this a non-runtime exception
+					throw new RuntimeException();
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return null;
+			}
+		}
+		return this.cached;
+	}
+
+	public int getId() {
+		return this.id;
+	}
 	public int getHouseNumber() {
-		return houseNumber;
+		return this.getCachedAddress().getHouseNumber();
 	}
 	public String getStreetName() {
-		return streetName;
+		return this.getCachedAddress().getStreetName();
 	}
 	public String getDistrictName() {
-		return districtName;
+		return this.getCachedAddress().getDistrictName();
 	}
 	public String getCityName() {
-		return cityName;
+		return this.getCachedAddress().getCityName();
 	}
 	public String getPostcode() {
-		return postcode;
+		return this.getCachedAddress().getPostcode();
+	}
+
+	public static Address fromResultSet(ResultSet results, int id) {
+		try {
+			return new CachedAddress(
+					results.getInt("address.id"),
+					results.getInt("address.houseNumber"),
+					results.getString("address.streetName"),
+					results.getString("address.districtName"),
+					results.getString("address.cityName"),
+					results.getString("address.postcode"));
+		} catch (SQLException e) {
+			return new Address(id);
+		}
+	}
+
+	public static int add(int houseNumber, String streetName, String districtName, String cityName, String postcode) {
+		try {
+			ResultSet result = model.db.Queries.addAddress(houseNumber, streetName, districtName, cityName, postcode);
+			result.next();
+			return result.getInt("id");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return -1;
+		}
 	}
 }

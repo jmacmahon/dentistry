@@ -2,6 +2,7 @@ package views;
 
 import java.awt.GridLayout;
 import java.util.List;
+import java.util.Vector;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -10,17 +11,44 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 
+import model.HealthcarePlan;
 import model.Patient;
 import model.Treatment;
+import model.Treatment.TreatmentType;
 
 public class Checkout extends ViewComponent {
-	private List<Treatment> treatments;
+	private List<Treatment> standardTreatments;
+	private List<Treatment> checkUpTreatments;
+	private List<Treatment> hygieneVisitTreatments;
+	private List<Treatment> repairWorkTreatments;
 	private Patient patient;
 
 	public Checkout(List<Treatment> treatments, Patient patient) {
 		super();
-		this.treatments = treatments;
 		this.patient = patient;
+		this.standardTreatments = new Vector<>();
+		this.checkUpTreatments = new Vector<>();
+		this.hygieneVisitTreatments = new Vector<>();
+		this.repairWorkTreatments = new Vector<>();
+
+		HealthcarePlan plan = patient.getPlan();
+
+		// This logic should be in the controller but it's near the deadline
+		// and I don't have time to refactor it.
+		for (Treatment treatment : treatments) {
+			if (treatment.getType() == TreatmentType.CHECK_UP
+					&& plan.getUsedCheckUps() < plan.getMaxCheckUps()) {
+				checkUpTreatments.add(treatment);
+			} else if (treatment.getType() == TreatmentType.HYGIENE_VISIT
+					&& plan.getUsedHygieneVisits() < plan.getMaxHygieneVisits()) {
+				hygieneVisitTreatments.add(treatment);
+			} else if (treatment.getType() == TreatmentType.REPAIR_WORK
+					&& plan.getUsedRepairWork() < plan.getMaxRepairWork()) {
+				repairWorkTreatments.add(treatment);
+			} else {
+				standardTreatments.add(treatment);
+			}
+		}
 	}
 
 	private JPanel getTotal() {
@@ -29,7 +57,7 @@ public class Checkout extends ViewComponent {
 		panel.add(new JLabel("Total:"));
 
 		int total = 0;
-		for (Treatment treatment : this.treatments) {
+		for (Treatment treatment : this.standardTreatments) {
 			total += treatment.getCost();
 		}
 
@@ -40,14 +68,30 @@ public class Checkout extends ViewComponent {
 
 	@Override
 	public JPanel getPanel() {
-		// TODO subscriptions & plans & stuff
-
 		JPanel panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
-		for (Treatment treatment : this.treatments) {
+		panel.add(new JLabel("Standard price treatments"));
+		for (Treatment treatment : this.standardTreatments) {
 			panel.add((new TreatmentDetail(treatment, this.patient)).getPanel());
 			panel.add(new JSeparator(JSeparator.HORIZONTAL));
 		}
+		panel.add(new JSeparator(JSeparator.HORIZONTAL));
+
+		panel.add(new JLabel("Treatments included in healthcare plan"));
+		for (Treatment treatment : this.checkUpTreatments) {
+			panel.add((new TreatmentDetail(treatment, this.patient)).getPanel());
+			panel.add(new JSeparator(JSeparator.HORIZONTAL));
+		}
+		for (Treatment treatment : this.hygieneVisitTreatments) {
+			panel.add((new TreatmentDetail(treatment, this.patient)).getPanel());
+			panel.add(new JSeparator(JSeparator.HORIZONTAL));
+		}
+		for (Treatment treatment : this.repairWorkTreatments) {
+			panel.add((new TreatmentDetail(treatment, this.patient)).getPanel());
+			panel.add(new JSeparator(JSeparator.HORIZONTAL));
+		}
+		panel.add(new JSeparator(JSeparator.HORIZONTAL));
+
 		panel.add(this.getTotal());
 		panel.add((new ReceiptButton()).getPanel());
 		return panel;
@@ -70,8 +114,7 @@ public class Checkout extends ViewComponent {
 			panel.add(new JLabel(this.treatment.getName()));
 
 			panel.add(new JLabel("Treatment type:"));
-			panel.add(new JLabel("not yet implemented"));
-			//			panel.add(new JLabel(this.treatment.getType()));
+			panel.add(new JLabel(this.treatment.getType().toString()));
 
 			panel.add(new JLabel("Treatment cost:"));
 			double costInPounds = this.treatment.getCost() / 100.0;
