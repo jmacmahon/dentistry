@@ -11,6 +11,7 @@ import model.Patient;
 
 public class HealthcarePlanDetail extends ViewComponent {
 	private Patient patient;
+	private JPanel wrapper;
 
 	public HealthcarePlanDetail(Patient patient) {
 		super();
@@ -18,7 +19,14 @@ public class HealthcarePlanDetail extends ViewComponent {
 	}
 
 	@Override
-	public JPanel getPanel() {
+	public void refresh() {
+		this.wrapper.removeAll();
+		this.wrapper.add(this.getInner());
+		this.wrapper.revalidate();
+		this.wrapper.repaint();
+	}
+
+	private JPanel getInner() {
 		HealthcarePlan plan = this.patient.getPlan();
 
 		JPanel panel = new JPanel();
@@ -43,9 +51,18 @@ public class HealthcarePlanDetail extends ViewComponent {
 			panel.add(new JLabel(plan.getUsedRepairWork() + "/" + plan.getMaxRepairWork()));
 		} else {
 			JButton newPlan = new JButton("Subscribe to a plan");
+			newPlan.addActionListener(e -> {
+				ViewComponent.spawnInFrame(new NewPlan(this.patient), "New plan");
+			});
 			panel.add(newPlan);
 		}
-
 		return panel;
+	}
+
+	@Override
+	public JPanel getPanel() {
+		this.wrapper = new JPanel();
+		this.wrapper.add(this.getInner());
+		return this.wrapper;
 	}
 }

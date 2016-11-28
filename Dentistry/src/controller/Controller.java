@@ -10,6 +10,7 @@ import javax.swing.JFrame;
 import main.Config;
 import model.Address;
 import model.Appointment;
+import model.HealthcarePlanType;
 import model.Partner;
 import model.Patient;
 import model.db.Database;
@@ -71,6 +72,12 @@ public class Controller {
 		}
 		Appointment.add(patient.getId(), partner.getId(), startTime, duration.intValue());
 		ViewComponent.closeNewAppointment();
+		ViewComponent.refreshAll();
+	}
+
+	public static void addPlan(Patient patient, HealthcarePlanType plan) {
+		HealthcarePlanType.add(patient.getId(), plan.getId());
+		ViewComponent.closeNewPlan();
 		ViewComponent.refreshAll();
 	}
 }

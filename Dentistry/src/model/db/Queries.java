@@ -170,4 +170,17 @@ public class Queries {
 	public static void deleteAppointment(int appointmentId) throws SQLException {
 		Config.db.runQuery("DELETE FROM appointment WHERE appointment.id = " + Integer.toString(appointmentId) + ";");
 	}
+
+	public static ResultSet getAllHealthcarePlans() throws SQLException {
+		return Config.db.runQuery("SELECT * FROM plan;");
+	}
+
+	public static ResultSet addPatientPlan(int patientId, int planId) throws SQLException {
+		Config.db.runQuery("INSERT INTO patientPlan (patientId, planId,"
+				+ " usedCheckUps, usedHygieneVisits, usedRepairWork) VALUES"
+				+ " (" + Integer.toString(patientId)
+				+ ", " + Integer.toString(planId)
+				+ ", 0, 0, 0);");
+		return Config.db.runQuery("SELECT id FROM patientPlan ORDER BY id DESC LIMIT 1;");
+	}
 }
